@@ -1,0 +1,47 @@
+      <h3 class="text-muted">BlueDog WP Installer</h3>
+      </div>
+
+   
+      
+      <div class="progress">
+            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="100" aria-valuetransitiongoal="0"
+                 aria-valuemin="0" aria-valuemax="100" style="width:0%">
+
+            </div>
+        </div>
+
+
+        <form method="post" action="" id="install_form">
+            <h1><?php echo _('Install WordPress using the options below. Edit <em>site-config.php</em> and installation profile `profile-config.php` to change option values.');?> </h1>
+
+            <p class="step"><button id="submit" class="btn btn-default"><?php echo _('Install WordPress');?></button></p>
+     
+       
+                 
+        <div id="install_messages" style="display:none"></div>
+    
+          <div id="log_messages" class="alert alert-info" style="display:none"><div><strong><?php echo _('Install Log:');?></strong></div></div> 
+          
+
+                          <!-- Site configuration values -->
+          <h2>Site Configuration</h2>  
+          <table id="site_config" class="table table-striped"></table>
+          
+          
+          <!-- profile configuration values -->
+          
+        <h2>Profile Configuration</h2>  
+        <table id="profile_config" class="table table-striped"></table><!-- profile configuration values -->
+        
+        
+
+          
+          
+         </form> <!-- end form -->
+                <script src="assets/js/jquery-1.8.3.min.js"></script>
+        
+        <script>var SITE_CONFIG = <?php echo json_encode( $wpress->getSafeConfig($wpress->SITE_CONFIG)); ?> ;</script>
+         <script>var PROFILE_CONFIG = <?php echo json_encode( $wpress->getSafeConfig($wpress->PROFILE_CONFIG    )); ?> ;</script>
+        <script>var PROFILES = <?php echo json_encode($wpress->getProfiles()); ?> ;</script>
+        <script>var editable_props = <?php echo json_encode($wpress->EDITABLE_PROPS); ?> ;</script>      
+        <script src="assets/js/install.js"></script>
