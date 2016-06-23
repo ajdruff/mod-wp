@@ -1,17 +1,17 @@
 <?php
 
 /**
- * BlueDog Support WordPress Installation Class
+ * Mod WP
  *
  * Provides methods to aid in installing WordPress.
  *
  * @author Andrew Druffner <andrew@bluedogsupport.com>
  * @copyright  2016 BlueDog Support
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, 
- * @package BlueDogWPI
+ * @package ModWP
  * @filesource
  */
-class bluedog_wpinstall {
+class modwp_install {
 
     //helper objects
     private $_PHP_LIB = null;

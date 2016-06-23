@@ -1,12 +1,11 @@
 <?php
 
 /*
-  Script Name: BPLATE-WPI
-  Author: Andrew Druffner
-  Contributors: Jonathan Buttigieg,Julio Potier
-  Script URI: https://github.com/ajdruff/bplate-wpi
-  Version: 1.0
-  Licence: GPLv3
+ * @author Andrew Druffner <andrew@bluedogsupport.com>
+ * @copyright  2016 BlueDog Support
+ * @license http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, 
+ * @package ModWP
+ * @filesource
  */
 
 
@@ -24,7 +23,7 @@ include(dirname( __FILE__ ) . '/bluedog-wpinstall.class.php');
 
 
 //do not use $wp or other global object that WordPress uses, or your'll run into naming conflicts and odd errors when including the WordPress libraries.
-$wpress = new bluedog_wpinstall; //avoid using $wp as the object name.
+$wpress = new modwp_install; //avoid using $wp as the object name.
 $wpress->sandbox();
 
 /*

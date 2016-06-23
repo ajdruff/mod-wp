@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    var bluedog_wpinstall = {}; //script namespace
+    var modwp_install = {}; //script namespace
 
 
 
@@ -14,7 +14,7 @@ $(document).ready(function () {
      * Setup Configuration Table
      * Displays all the options that are set in config.php
      */
-    bluedog_wpinstall.setUpConfigTable = function () {
+    modwp_install.setUpConfigTable = function () {
 
 
         $('#site_config').html((getConfigAsHTML(SITE_CONFIG, 'SITE_CONFIG')));
@@ -28,7 +28,7 @@ $(document).ready(function () {
      * 
      * Updates displayed values with the new PROFILE_CONFIG 
      */
-    bluedog_wpinstall.updateProfile = function () {
+    modwp_install.updateProfile = function () {
 
         var form_values = $("#install_form").serialize();
 
@@ -214,14 +214,14 @@ $(document).ready(function () {
 //setup Events
 
 
-    bluedog_wpinstall.setupEvents = function () {
+    modwp_install.setupEvents = function () {
 
         //change profile
 
         jQuery('#profile').change(function () {
 
 
-            bluedog_wpinstall.updateProfile();
+            modwp_install.updateProfile();
 
 
         });
@@ -248,7 +248,7 @@ $(document).ready(function () {
     }
 
 //installation functionality
-    bluedog_wpinstall.install = function () {
+    modwp_install.install = function () {
         var retry = 0;
         var progress_bar_elem = $('.progress-bar').clone(); //cache progress bar so we can reset it
         var log_messages_elem = $('#log_messages').clone(); //cache progress bar so we can reset it
@@ -279,7 +279,7 @@ $(document).ready(function () {
          * Install
          *
          * Sends an ajax request to wpinstall.php and handles the response
-         * @package BlueDogWPInstall
+         * @package ModWP
          * @param string last_action The name of the last installation action. Used by wpinstall.php to determine the next install step.
          * @return string The parsed output of the form body tag
          */
@@ -369,7 +369,7 @@ $(document).ready(function () {
          * displayMessages
          *
          * Displays Messages 
-         * @package BlueDogWPInstall
+         * @package ModWP
          * @param array messages The messages to display
          * @param string alert_class The boostrap class for alerts. acceptable values: 'danger' 'info' 'warning'  'success'
          * @return string void
@@ -392,7 +392,7 @@ $(document).ready(function () {
          * logMessages
          *
          * Adds an information message to the log_messages element.
-         * @package BlueDogWPInstall
+         * @package ModWP
          * @param array messages The messages to display
          * @return void
          */
@@ -418,9 +418,9 @@ $(document).ready(function () {
 
 
 
-    bluedog_wpinstall.setUpConfigTable();
-    bluedog_wpinstall.setupEvents();
-    bluedog_wpinstall.install();
+    modwp_install.setUpConfigTable();
+    modwp_install.setupEvents();
+    modwp_install.install();
 
 
 });

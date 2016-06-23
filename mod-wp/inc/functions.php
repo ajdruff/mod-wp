@@ -1,4 +1,15 @@
 <?php
+/**
+ * Common Functions
+ *
+ * @author Andrew Druffner <andrew@bluedogsupport.com>
+ * @copyright  2016 BlueDog Support
+ * @license http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, 
+ * @package ModWP
+ * @filesource
+ */
+
+
 
 if ( !function_exists( '_' ) ) {
 
