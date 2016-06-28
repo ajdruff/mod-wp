@@ -1,6 +1,6 @@
-Mod WP
+![Mod WP](https://cdn.rawgit.com/ajdruff/mod-wp/master/assets/images/mod-wp-logo-150x150.png)
 ================
-Mod WP is a WordPress installer that enables you to modify the installation of 
+**Mod WP** is a WordPress installer that enables you to modify the installation of 
 WordPress to install custom content, themes and plugins. 
 
 #Why use Mod WP to install WordPress?
