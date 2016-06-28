@@ -10,7 +10,7 @@
 
 
 /**
- * install_wp
+ * Install
  *
  * Install WordPress
  * @param string $task The task for the installer to perform
@@ -18,7 +18,7 @@
  * @param string $directory The directory path to the WordPress installation
  * @return void
  */
-include(dirname( __FILE__ ) . '/bluedog-wpinstall.class.php');
+include(dirname( __FILE__ ) . '/mod-wp.class.php');
 
 
 
@@ -46,8 +46,4 @@ if ( $wpress->isCommandLine() ) {
     //evaluate query variables to see what to do next
     $wpress->parseQueryVar();
 }
-
-
-
-
-
+?>

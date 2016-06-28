@@ -40,7 +40,7 @@ $site[ 'profile' ] = 'default'; #default 'PROFILE_NAME'
 
 
 /* * *********************************
- * Advanced-Installation Tasks
+ * Advanced-Selective Install
  * ********************************* */
 
 $site[ 'wpDownload' ] = true; #default true
