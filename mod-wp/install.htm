@@ -1,9 +1,25 @@
-      <h3 class="text-muted">BlueDog WP Installer</h3>
+
+     
+      
+      
+      
+                                 <div class="navbar-header">
+
+    <a class="navbar-brand" rel="home" href="#" >
+        <img style="max-width:75px; margin-top: 2px;"
+             src="assets/images/mod-wp-logo-150x150.png">
+    </a> 
+</div><div class="lead" style="margin-top: 35px;"><?php echo _('Customizing WordPress just got easier');?> </div>
+      
+      
+      
       </div>
 
-   
       
-      <div class="progress">
+      
+      
+      
+      <div class="progress" style="margin-top:75px">
             <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="100" aria-valuetransitiongoal="0"
                  aria-valuemin="0" aria-valuemax="100" style="width:0%">
 
@@ -12,9 +28,9 @@
 
 
         <form method="post" action="" id="install_form">
-            <h1><?php echo _('Install WordPress using the options below. Edit <em>site-config.php</em> and installation profile `profile-config.php` to change option values.');?> </h1>
 
-            <p class="step"><button id="submit" class="btn btn-default"><?php echo _('Install WordPress');?></button></p>
+
+            <p class="step"><button id="submit" class="btn btn-warning" style="width:100%"><?php echo _('Install WordPress');?></button></p>
      
        
                  
@@ -44,4 +60,4 @@
          <script>var PROFILE_CONFIG = <?php echo json_encode( $wpress->getSafeConfig($wpress->PROFILE_CONFIG    )); ?> ;</script>
         <script>var PROFILES = <?php echo json_encode($wpress->getProfiles()); ?> ;</script>
         <script>var editable_props = <?php echo json_encode($wpress->EDITABLE_PROPS); ?> ;</script>      
-        <script src="assets/js/install.js"></script>
+        <script src="assets/js/mod-wp.js"></script>

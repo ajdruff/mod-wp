@@ -1,17 +1,16 @@
 <?php
 
 /*
-  Script Name: BPLATE-WPI
-  Author: Andrew Druffner
-  Contributors: Jonathan Buttigieg,Julio Potier
-  Script URI: https://github.com/ajdruff/bplate-wpi
-  Version: 1.0
-  Licence: GPLv3
+ * @author Andrew Druffner <andrew@bluedogsupport.com>
+ * @copyright  2016 BlueDog Support
+ * @license http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, 
+ * @package ModWP
+ * @filesource
  */
 
 
 /**
- * install_wp
+ * Install
  *
  * Install WordPress
  * @param string $task The task for the installer to perform
@@ -19,12 +18,12 @@
  * @param string $directory The directory path to the WordPress installation
  * @return void
  */
-include(dirname( __FILE__ ) . '/bluedog-wpinstall.class.php');
+include(dirname( __FILE__ ) . '/mod-wp.class.php');
 
 
 
 //do not use $wp or other global object that WordPress uses, or your'll run into naming conflicts and odd errors when including the WordPress libraries.
-$wpress = new bluedog_wpinstall; //avoid using $wp as the object name.
+$wpress = new modwp_install; //avoid using $wp as the object name.
 $wpress->sandbox();
 
 /*
@@ -47,8 +46,4 @@ if ( $wpress->isCommandLine() ) {
     //evaluate query variables to see what to do next
     $wpress->parseQueryVar();
 }
-
-
-
-
-
+?>
