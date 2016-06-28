@@ -59,7 +59,8 @@ WordPress to install custom content, themes and plugins.
 
      1. Go to [https://github.com/ajdruff/mod-wp](https://github.com/ajdruff/mod-wp) and click 'Clone or Download' and click the 'Download ZIP' link, or download from [https://github.com/ajdruff/mod-wp/archive/master.zip](https://github.com/ajdruff/mod-wp/archive/master.zip)
      
-     2.  extract to your site's root folder
+     2.  Extract `mod-wp-master.zip` to your site's root folder (e.g: `public_html` or `htdocs`)
+     3.  Rename the parent directory from `mod-wp-master` to `mod-wp`
 
 
 

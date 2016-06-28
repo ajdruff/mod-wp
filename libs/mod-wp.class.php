@@ -70,7 +70,7 @@ class modwp_install {
         $this->_WPQI_CACHE_CORE_PATH = $this->_WPQI_CACHE_PATH . 'core/';
         $this->_WPQI_CACHE_PLUGINS_PATH = $this->_WPQI_CACHE_PATH . 'plugins/';
         $this->_RETRY_MAX = 3; //number of retries on a failed ajax request
-        $this->INSTALLER_DIRECTORY = dirname( __FILE__ ); //no trailing slash. The path to the installer script  
+        $this->INSTALLER_DIRECTORY = dirname(dirname( __FILE__ )); //no trailing slash. The path to the installer script  
         $this->PROFILES_DIRECTORY = $this->INSTALLER_DIRECTORY . '/profiles';
         $this->SITE_CONFIG_FILE = $this->INSTALLER_DIRECTORY . '/site-config.php';
 
@@ -119,7 +119,7 @@ class modwp_install {
 
 
 
-        require( 'inc/functions.php' );
+        require( $this->INSTALLER_DIRECTORY .'/libs/mod-wp.functions.php' );
         $this->_createCacheDirs();
 
         //define $this->SITE_CONFIG and $this->PROFILE_CONFIG

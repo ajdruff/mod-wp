@@ -18,7 +18,7 @@
  * @param string $directory The directory path to the WordPress installation
  * @return void
  */
-include(dirname( __FILE__ ) . '/mod-wp.class.php');
+include(dirname( __FILE__ ) . '/libs/mod-wp.class.php');
 
 
 
@@ -39,7 +39,7 @@ if ( $wpress->isCommandLine() ) {
 
     //include the front end html only if not called by command line and not requested with an action query
     if ( !isset( $_GET[ 'action' ] ) ) {
-        include(dirname( __FILE__ ) . '/installer-templates/jumbotron-narrow.htm');
+        include(dirname( __FILE__ ) . '/templates/jumbotron-narrow.htm');
     }
 
 
