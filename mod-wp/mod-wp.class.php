@@ -1,17 +1,17 @@
 <?php
 
 /**
- * BlueDog Support WordPress Installation Class
+ * Mod WP
  *
  * Provides methods to aid in installing WordPress.
  *
  * @author Andrew Druffner <andrew@bluedogsupport.com>
  * @copyright  2016 BlueDog Support
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, 
- * @package BlueDogWPI
+ * @package ModWP
  * @filesource
  */
-class bluedog_wpinstall {
+class modwp_install {
 
     //helper objects
     private $_PHP_LIB = null;
@@ -44,7 +44,7 @@ class bluedog_wpinstall {
     public $INSTALLER_DIRECTORY = null;
     public $SITE_CONFIG_FILE = null;
     public $PROFILE_CONFIG_FILE = null;
-    private $_UPDATED_OPTIONS=array(); //keeps track of options that have already been updated
+    private $_UPDATED_OPTIONS = array(); //keeps track of options that have already been updated
 
     function __construct() {
 
@@ -52,8 +52,6 @@ class bluedog_wpinstall {
 
 
         $this->_init(); //initialize class instance
-        
-   
     }
 
     /**
@@ -79,16 +77,16 @@ class bluedog_wpinstall {
         //make a field editable by adding an identical property to editable props and setting its value to 1. 
         //e.g.$this->EDITABLE_PROPS['wp_options']['blogname'] =1, or $this->EDITABLE_PROPS['activate_plugins'] =1
         $this->EDITABLE_PROPS[ 'wp_options' ][ 'blogname' ] = true; //those config properties that will have editable form fields associated with them
-        $this->EDITABLE_PROPS[ 'wp_options' ][ 'blogdescription' ] = true; 
-        $this->EDITABLE_PROPS['reinstall'] =1;
-        $this->EDITABLE_PROPS['wp_directory'] =1;
-        $this->EDITABLE_PROPS['wpDownload'] =1;
-        $this->EDITABLE_PROPS['wpConfig'] =1;
-        $this->EDITABLE_PROPS['wpInstallCore'] =1;
-        $this->EDITABLE_PROPS['wpInstallThemes'] =1;
-        $this->EDITABLE_PROPS['wpInstallPlugins'] =1;
-        $this->EDITABLE_PROPS['wpInstallThemes'] =1;
-        
+        $this->EDITABLE_PROPS[ 'wp_options' ][ 'blogdescription' ] = true;
+        $this->EDITABLE_PROPS[ 'reinstall' ] = 1;
+        $this->EDITABLE_PROPS[ 'wp_directory' ] = 1;
+        $this->EDITABLE_PROPS[ 'wpDownload' ] = 1;
+        $this->EDITABLE_PROPS[ 'wpConfig' ] = 1;
+        $this->EDITABLE_PROPS[ 'wpInstallCore' ] = 1;
+        $this->EDITABLE_PROPS[ 'wpInstallThemes' ] = 1;
+        $this->EDITABLE_PROPS[ 'wpInstallPlugins' ] = 1;
+        $this->EDITABLE_PROPS[ 'wpInstallThemes' ] = 1;
+
         #$this->EDITABLE_PROPS['wp_config']['AUTOSAVE_INTERVAL'] =1;
     }
 
@@ -130,7 +128,7 @@ class bluedog_wpinstall {
 
         $this->_setProfileConfig();
 
-       
+
 
 
 // Build the absolute path of the configured director. If not provided, use the parent directory of this file
@@ -588,7 +586,7 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
         }
 
 
-       
+
 // WordPress Downloaded but in danger of being overwritten?
         if ( $files_overwrite && file_exists( $this->WP_DIRECTORY . 'wp-includes' ) && $this->SITE_CONFIG[ 'reinstall' ] !== true ) {
 
@@ -615,9 +613,7 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
             if ( !$this->_isDBEmpty() && $this->SITE_CONFIG[ 'reinstall' ] ) {
 
                 $this->_deleteDB();
-            }
-
-            if ( !$this->_isDBEmpty() ) {
+            } else if ( !$this->_isDBEmpty() ) {
 
 
 
@@ -824,8 +820,8 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
         $this->_wpCreateWPConfigHome();
 
         $this->_LOG_MESSAGES[] = gettext( 'Updated wp-config.php with database and site settings' );
-        
-        
+
+
         $this->_LAST_ACTION = 'wpConfig';
         $this->_displayMessages();
     }
@@ -991,12 +987,12 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
 
 //Update Media Settings
         $this->_wpSetMediaOptions();
-        
+
 //Update All Other options not yet used.      
         $this->_wpUpdateOptions();
         $this->_LOG_MESSAGES[] = gettext( 'Updated wp_options table' );
-        
-        
+
+
 //Add custom content
         $this->_wpAddCustomContent();
 
@@ -1110,8 +1106,11 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
 
 
         $custom_theme_directory = $this->PROFILE_DIRECTORY . '/themes';
-        
-     
+
+        //check to see if directory actually exists, if not exit
+        if ( !file_exists( $custom_theme_directory ) ) {
+            return;
+        }
         $target_theme_directory = $this->WP_DIRECTORY . '/wp-content/themes';
 
 //scandir returns all the folder and file names in the directory (non-recursive), 
@@ -1267,7 +1266,8 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
             }
         }
 
-        if ( $this->PROFILE_CONFIG[ 'add_custom_plugins' ] == 1 ) {
+        if ( $this->PROFILE_CONFIG[ 'add_custom_plugins' ] == 1 && file_exists( $this->PROFILE_DIRECTORY . '/plugins' ) ) {
+
 
 // We scan the folder
             $plugins = scandir( $this->PROFILE_DIRECTORY . '/plugins' );
@@ -1378,17 +1378,16 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
         $dbname = ($db_exists) ? "dbname=" . $this->SITE_CONFIG[ 'wp_config' ][ 'DB_NAME' ] : '';
 
         try {
-            
-      
-            //$db = new PDO( 'mysql:host=' . $this->SITE_CONFIG[ 'wp_config' ][ 'DB_HOST' ] . ';dbname=' . $this->SITE_CONFIG[ 'wp_config' ][ 'DB_NAME' ], $this->SITE_CONFIG[ 'wp_config' ][ 'DB_USER' ], $this->SITE_CONFIG[ 'wp_config' ][ 'DB_PASSWORD' ] );
-         //    $connection_string='mysql:host=' . 'localhost' . ';dbname=' . 'bplate_wpi', 'root', '!5mPrg^UVj37';
-            
-             $db = new PDO('mysql:host=' . 'localhost' . ';dbname=' . 'bplate_wpi', 'root', '!5mPrg^UVj37');
-           if (false){
-             $db = new PDO(
+
+
+
+
+
+
+            $db = new PDO(
                     'mysql:host=' . $this->SITE_CONFIG[ 'wp_config' ][ 'DB_HOST' ] . ';' . $dbname, $this->SITE_CONFIG[ 'wp_config' ][ 'DB_USER' ], $this->SITE_CONFIG[ 'wp_config' ][ 'DB_PASSWORD' ]
             );
-           }
+
             return $db;
         } catch ( Exception $e ) {
 
@@ -1416,9 +1415,12 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
 
         $db = $this->_getDBConnection();
 
+        $query = "show tables like '%'";
+
 //returns false if no results, otherwise returns the first table name.
-        $result = $db->query( "show tables like '%'", PDO::FETCH_ASSOC )->fetchColumn();
-// echo ($result===false)?'database is empty':'database is full';
+        $result = $db->query( $query, PDO::FETCH_ASSOC )->fetchColumn();
+
+        // echo ($result===false)?'database is empty':'database is full';
 
         return ($result === false);
     }
@@ -1482,6 +1484,8 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
         if ( function_exists( 'openssl_random_pseudo_bytes' ) ) {
             $password = bin2hex( openssl_random_pseudo_bytes( 6 ) );
         } else {
+
+
             $password = 'password'; //replace this with // https://github.com/ircmaxell/RandomLib
         }
 
@@ -1770,7 +1774,25 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
      */
     public function sandbox() {
 
-   
+
+        return;
+        require_once $this->INSTALLER_DIRECTORY . '/libs/PHP-PasswordLib/lib/PasswordLib/PasswordLib.php';
+        // require_once 'path/to/PasswordLib/PasswordLib.php
+        $factory = new PasswordLib\Random\Factory;
+        $generator = $factory->getHighStrengthGenerator();
+        $password = $generator->generateString( 16 );
+
+        echo 'password =' . $password;
+        die();
+
+
+        return;
+
+        $factory = new RandomLib\Factory;
+        $generator = $factory->getMediumStrengthGenerator();
+        $password = $generator->generateString( $length );
+
+
         return;
     }
 
@@ -1868,8 +1890,7 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
 
         $this->_wpIncludeWP();
 
-    $this->_UPDATED_OPTIONS[]='template'; //prevent theme from being updated using the update_options method which won't work if we've already deleted it. 
-
+        $this->_UPDATED_OPTIONS[] = 'template'; //prevent theme from being updated using the update_options method which won't work if we've already deleted it. 
 //if the theme to be activated exists, delete the default themes
         if ( $this->_wpThemeExists() && ($this->PROFILE_CONFIG[ 'remove_default_themes' ]) ) {
 //delete default themes except the desired theme to be activated
@@ -1910,8 +1931,14 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
         $file_info = null;
 //check zip
 //check themes folder & wp-content/themes folder
-        $dirs[] = $this->PROFILE_DIRECTORY . '/themes';
-        $dirs[] = $this->WP_DIRECTORY . '/wp-content/themes';
+
+        if ( file_exists( $this->PROFILE_DIRECTORY . '/themes' ) ) {
+            $dirs[] = $this->PROFILE_DIRECTORY . '/themes';
+        }
+        if ( file_exists( $this->WP_DIRECTORY . '/wp-content/themes' ) ) {
+            $dirs[] = $this->WP_DIRECTORY . '/wp-content/themes';
+        }
+
 
 
         foreach ( $dirs as $dir ) {
@@ -2010,11 +2037,6 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
 
 
         $this->SITE_CONFIG = $this->phpLib()->convertToBool( $this->SITE_CONFIG );
-        
-        
-        
-         
-         
     }
 
     /**
@@ -2206,11 +2228,11 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
      * @param boolean $safe True to strip sensitive passwords and other unwanted values.False to return everything
      * @return void
      */
-    private function _getConfigAsJson($safe) {
-        
-          
-        $json[ 'SITE_CONFIG' ] = ($safe) ? $this->getSafeConfig($this->SITE_CONFIG):$this->SITE_CONFIG;
-        $json[ 'PROFILE_CONFIG' ] = ($safe) ? $this->getSafeConfig($this->PROFILE_CONFIG):$this->PROFILE_CONFIG;
+    private function _getConfigAsJson( $safe ) {
+
+
+        $json[ 'SITE_CONFIG' ] = ($safe) ? $this->getSafeConfig( $this->SITE_CONFIG ) : $this->SITE_CONFIG;
+        $json[ 'PROFILE_CONFIG' ] = ($safe) ? $this->getSafeConfig( $this->PROFILE_CONFIG ) : $this->PROFILE_CONFIG;
         return json_encode( $json );
     }
 
@@ -2223,48 +2245,45 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
      * @return void
      */
     public function parseQueryVar() {
-        
-        
-        if ( !isset($_GET['action']) ) {
-           return; 
+
+
+        if ( !isset( $_GET[ 'action' ] ) ) {
+            return;
         }
-        
-   
-        
-        switch($_GET['action']){
-            
+
+
+
+        switch ( $_GET[ 'action' ] ) {
+
             case 'install':
                 $this->wpInstall();
                 break;
-            
+
             case 'config':
-                echo $this->_getConfigAsJson(true);
-                break;            
-            
+                echo $this->_getConfigAsJson( true );
+                break;
         }
     }
-    
+
     /**
      * Update WordPress Option
      *
      * A wrapper around update_option which also tracks which options we've updated already
      *
      * @param string $option_name The name of the value in the option_name column
-        * @param string $option_value The name of the value in the option_value column
+     * @param string $option_value The name of the value in the option_value column
      * @return void
      */
-    private function _update_option( $option_name,$option_value ) {
-        if ( array_search($option_name,$this->_UPDATED_OPTIONS)!==false) {
-             return;
-             
-        }   
-       
-        $this->_wpIncludeWP(); //include WordPress Library
-        $this->_UPDATED_OPTIONS[]=$option_name; //add the option name to our tracking array so we don't add it again
-        update_option( $option_name, $option_value ); //update the option
+    private function _update_option( $option_name, $option_value ) {
+        if ( array_search( $option_name, $this->_UPDATED_OPTIONS ) !== false ) {
+            return;
+        }
 
+        $this->_wpIncludeWP(); //include WordPress Library
+        $this->_UPDATED_OPTIONS[] = $option_name; //add the option name to our tracking array so we don't add it again
+        update_option( $option_name, $option_value ); //update the option
     }
-    
+
     /**
      * Update Options
      *
@@ -2274,17 +2293,16 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
      * @return void
      */
     private function _wpUpdateOptions() {
-      
+
         $this->_getDbConnection();
-        
-        foreach ( $this->SITE_CONFIG['wp_options'] as $option_name=>$option_value ) {
-            $this->_update_option( $option_name,$option_value );
+
+        foreach ( $this->SITE_CONFIG[ 'wp_options' ] as $option_name => $option_value ) {
+            $this->_update_option( $option_name, $option_value );
         }
-            
-        foreach ( $this->PROFILE_CONFIG['wp_options'] as $option_name=>$option_value ) {
-         //   $this->_update_option( $option_name,$option_value );
+
+        foreach ( $this->PROFILE_CONFIG[ 'wp_options' ] as $option_name => $option_value ) {
+            //   $this->_update_option( $option_name,$option_value );
         }
-        
     }
 
 }
