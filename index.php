@@ -39,7 +39,7 @@ if ( $wpress->isCommandLine() ) {
 
     //include the front end html only if not called by command line and not requested with an action query
     if ( !isset( $_GET[ 'action' ] ) ) {
-        include(dirname( __FILE__ ) . '/templates/jumbotron-narrow.htm');
+        include(dirname( __FILE__ ) . '/assets/templates/jumbotron-narrow.htm');
     }
 
 
