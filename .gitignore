@@ -1,7 +1,7 @@
-/bplate-wpi/site-config.php
-/bplate-wpi/install-dropin-sample.php
-/bplate-wpi/archived
-/bplate-wpi/cache
+/mod-wp/site-config.php
+/mod-wp/install-dropin-sample.php
+/mod-wp/archived
+/mod-wp/cache
 /nbproject
 /archived
 /_live
