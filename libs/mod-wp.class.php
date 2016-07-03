@@ -74,6 +74,10 @@ class modwp_install {
         $this->_WPQI_CACHE_PLUGINS_PATH = $this->_WPQI_CACHE_PATH . 'plugins/';
         $this->_RETRY_MAX = 3; //number of retries on a failed ajax request
         $this->INSTALLER_DIRECTORY = dirname( dirname( __FILE__ ) ); //no trailing slash. The path to the installer script  
+        $this->SITE_CONFIG_FILE_DEFAULTS = $this->INSTALLER_DIRECTORY . '/.defaults-site-config.php';
+        $this->PROFILE_CONFIG_FILE_DEFAULTS= $this->INSTALLER_DIRECTORY . '/.defaults-profile-config.php';
+        
+        
         $this->PROFILES_DIRECTORY = $this->INSTALLER_DIRECTORY . '/profiles';
         $this->SITE_CONFIG_FILE = $this->INSTALLER_DIRECTORY . '/site-config.php';
         $this->_PASSWORD_LIBRARY=null; //password library. $this->_PASSWORD_LIBRARY='openssl' or null to use openssl. 'randomlib' to use RandomLib
@@ -818,10 +822,11 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
         );
 
 
-
+        if ( $this->SITE_PROFILE['slide_rule']===true) {
         $this->_wpCreateWPConfig( 'dev' );
+        $this->_wpCreateWPConfig( 'stage' );   
+        }
         $this->_wpCreateWPConfig( 'live' );
-        $this->_wpCreateWPConfig( 'stage' );
         $this->_wpCreateWPConfigHome();
 
         $this->_LOG_MESSAGES[] = gettext( 'Updated wp-config.php with database and site settings' );
@@ -2023,7 +2028,11 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
             exit();
         }
 
+         include($this->SITE_CONFIG_FILE_DEFAULTS); //include defaults in case the selected config file doesnt have all the required settings
         include($this->SITE_CONFIG_FILE); //include site configuration
+        
+        
+        
         $this->SITE_CONFIG = $site; //$site is defined in the site configuration file site-config.php . 
         //set reinstall variable after $config file is read or it may be overwritten
 //reinstall is not usually found in the config file, so define it here if not already defined by the config file
@@ -2079,9 +2088,10 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
             $this->_displayMessages( $this->_ERROR_MESSAGES, 'error' );
             die();
         }
-
+        
+        include($this->PROFILE_CONFIG_FILE_DEFAULTS); //include defaults in case the selected config file doesnt have all the required settings
         include($this->PROFILE_CONFIG_FILE);
-
+        
 
         $this->PROFILE_CONFIG = $profile; //$profile is defined in the profile configuration file profile-config.php . 
         //replace any variables with those that are contained in the GET request (for initial page build/page refresh)
