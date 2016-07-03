@@ -822,7 +822,7 @@ include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
         );
 
 
-        if ( $this->SITE_PROFILE['slide_rule']===true) {
+        if ( $this->SITE_CONFIG['slide_rule']===true) {
         $this->_wpCreateWPConfig( 'dev' );
         $this->_wpCreateWPConfig( 'stage' );   
         }
