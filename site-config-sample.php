@@ -61,4 +61,14 @@ $site[ 'debug-show-exceptions' ] = false; #default false //shows detailed except
 
 $site[ 'reinstall' ] = false; #default false //overwrites existing database and installation target directory
 
+
+/* * *********************************
+ * Advanced-Extras
+ * ********************************* */
+
+$site[ 'slide_rule' ] = false; #default false; whether to generate additional configuration files for slide_rule
+$site[ 'set_permissions' ] = true; #default true; whether to set secure permissions after installation
+
+
+
 ?>
