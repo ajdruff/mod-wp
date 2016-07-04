@@ -335,6 +335,70 @@ A 'retry' mechanism was added to try to overcome what is probably a timing limit
 Make a copy of mod-wp/site-config-sample.php and rename the copy to  mod-wp/site-config.php.  Edit the new file with your site's database configuration and username and login. See the *Configuration* section for more information.
 
 
+**Cannot create the WordPress database...**
+
+This error occurs because the credentials you provided do not have permissions to create a WordPress database. You can still continue, but you'll need to create the database manually or provide credentials for a user that has been granted the 'Create' permission.
+
+
+Either update the site-config.php with user credentials that have permissions to create a database, or do one of the following:
+
+
+
+*For shared web hosting accounts*
+
+Use the Control Panel or phpMyAdmin tools that are provided by your web hosting provider. 
+
+*By Command Line:*
+
+Login using MySQL credentials with permissions to create a database:
+
+    mysql -u username -p
+    password:******
+
+Execute the Create Database query:
+
+    mysql> CREATE DATABASE IF NOT EXISTS `YOUR_DB_NAME`;
+
+
+*Using a MySQL Query*
+
+While logged in as a user with the create permissions into a MySQL Admin tool such as phpMyAdmin, Netbeans, or Toad, execute the following query:
+
+    CREATE DATABASE IF NOT EXISTS `YOUR_DB_NAME`
+
+
+**Cannot drop the existing database ...**
+
+You may receive this error when attempting to re-install with a user account that does not have permissions to drop a database.
+
+Either update the site-config.php with user credentials that have permissions to drop a database, or do one of the following:
+
+
+*For shared web hosting accounts*
+
+Use the Control Panel or phpMyAdmin tools that are provided by your web hosting provider. 
+
+*By Command Line:*
+
+Login using MySQL credentials with permissions to create a database:
+
+    mysql -u username -p
+    password:******
+
+Execute the Drop Database query:
+
+    mysql> DROP DATABASE IF EXISTS `YOUR_DB_NAME`;
+
+
+*Using a MySQL Query*
+
+While logged in as a user with  drop permissions into a MySQL Admin tool such as phpMyAdmin, Netbeans, or Toad, execute the following query:
+
+    DROP DATABASE IF EXISTS `YOUR_DB_NAME`;
+
+
+
+
 **Memory Errors**
 
 If you receive a memory error, similar to ***Fatal error: Allowed memory size of xxxx bytes exhausted * , increase the `memory_limit` setting in the php.ini file. 256M should be the most you'll need. After you install WordPress, you can reset the memory limit to its original value.
