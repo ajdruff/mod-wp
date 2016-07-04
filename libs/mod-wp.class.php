@@ -463,11 +463,18 @@ class modwp_install {
         $contents = "<?php
 	
 
+	
 	if ( !defined('ABSPATH') )
 	define('ABSPATH', (dirname(__FILE__)) );
-
-//include ('../config/wp-config.php');
-include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
+	
+	
+	//check first for a path above the webroot. if not found, use the one in the same directory.
+	if ( file_exists(realpath(dirname(dirname(__FILE__)). '/../config/wp-config.php'))) {
+		include realpath(dirname(dirname(__FILE__)). '/../config/wp-config.php')  ; 
+		}else {
+		@include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
+		
+	}
 
 ?>";
 
