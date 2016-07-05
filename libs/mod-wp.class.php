@@ -411,7 +411,7 @@ class modwp_install {
 
             case "dev":
                 if ( $this->SITE_CONFIG['move_wpconfig']) {                  
-                $config_directory = realpath( dirname( $this->WP_DIRECTORY ) ) . "/config";
+                $config_directory = realpath( ( $this->WP_DIRECTORY ) ) . "/config";
                }else {
                    
                    $config_directory = realpath( ( $this->WP_DIRECTORY ) );
@@ -422,7 +422,7 @@ class modwp_install {
                 }
                 break;
             case "live":
-                $config_directory_parent = realpath( dirname( $this->WP_DIRECTORY ) ) . "/_live";
+                $config_directory_parent = realpath( ( $this->WP_DIRECTORY ) ) . "/_live";
                 if ( !file_exists( $config_directory_parent ) ) {
 
                     mkdir( $config_directory_parent );
@@ -433,7 +433,7 @@ class modwp_install {
                 break;
 
             case "stage":
-                $config_directory_parent = realpath( dirname( $this->WP_DIRECTORY ) ) . "/_stage";
+                $config_directory_parent = realpath( ( $this->WP_DIRECTORY ) ) . "/_stage";
                 if ( !file_exists( $config_directory_parent ) ) {
 
                     mkdir( $config_directory_parent );
@@ -470,6 +470,7 @@ class modwp_install {
      * @param none
      * @return void
      */
+    
     private function _wpCreateWPConfigHome() {
         //todo: can we turn these into relative paths? if you have to move them between servers its a problem. 
         //calculate the path 
@@ -481,8 +482,13 @@ class modwp_install {
                 "dirname(__FILE__)" //if in the web root, only need to get directory above.
                 :"dirname(dirname(__FILE__))" //if not in the web root, its in a subdirectory so have to step one more directory above
             ;
+        
+        $wordpress_dir= "dirname(__FILE__)";
         $config_file_relative_path='/config/wp-config.php';
-   
+        $wp_config_path_above_web_root=($is_web_root)?
+                "realpath(dirname($wordpress_dir). \"$config_file_relative_path\")":
+                "realpath(dirname(dirname($wordpress_dir)). \"$config_file_relative_path\")"
+                ;
 
         $contents = "<?php
 	
@@ -493,8 +499,8 @@ class modwp_install {
 	
 	
 	//check first for a path above the webroot. if not found, use the one in the same directory.
-	if ( file_exists(realpath(dirname($wordpress_dir). \"$config_file_relative_path\") )) {
-		include realpath(dirname($wordpress_dir). \"$config_file_relative_path\")  ; 
+	if ( file_exists($wp_config_path_above_web_root) ) {
+		include $wp_config_path_above_web_root  ; 
 		}else {
 		include realpath(($wordpress_dir). \"$config_file_relative_path\")   ;
 		
