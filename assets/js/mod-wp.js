@@ -71,8 +71,12 @@ $(document).ready(function () {
         function getProfileDropDownHTML(config_name) {
             var profile_select_html;
             profile_select_html = '';
+            selected='';
             for (var profile in PROFILES) {
-                profile_select_html = profile_select_html + '<option value="' + PROFILES[profile] + '">' + PROFILES[profile] + '</option>';
+                if (PROFILES[profile] ===SITE_CONFIG['profile']) {
+                  selected='selected';  
+                }else {selected=''}
+                profile_select_html = profile_select_html + '<option '+selected+' value="' + PROFILES[profile] + '">' + PROFILES[profile] + '</option>';
             }
 
 
