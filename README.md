@@ -363,7 +363,7 @@ For more information on troubleshooting script timing issues, see the **'Timing 
 
 
 
-##Errors
+##Errors & Installation Failures
 
 
 **'Cannot proceed without a site-config.php file! Create one from `site-config-sample.php`'**
@@ -448,6 +448,20 @@ Execute the Drop Database query:
 While logged in as a user with  drop permissions into a MySQL Admin tool such as phpMyAdmin, Netbeans, or Toad, execute the following query:
 
     DROP DATABASE IF EXISTS `YOUR_DB_NAME`;
+
+**WordPress pages are generated partially or without styling**
+
+When you browse to your WordPress site after installation, pages may appear unstyled or with some text missing. This can occur for several reasons which may include:
+
+* a reinstallation occurred into a different directory but `wpInstallCore`wasn't executed so that it could update the site and home urls.
+* the installation was interrupted due to an error
+
+To fix this, simply re-install, setting all options under the Selective Installation tasks to true , except for `$site['wpResetPassword'] which should be set to false. You will also have to set $site['reinstall']=true to overwrite your existing database settings. Be aware that this will overwrite your database and the files in your installation directory.
+
+If overwriting is not an option  if you are worried about losing data, you can go set the following in your wp-config.php file:
+
+    define('WP_SITEURL','/path/to/your/wordpress/directory')
+
 
 
 
