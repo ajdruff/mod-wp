@@ -72,7 +72,7 @@ class modwp_install {
         $this->_WPQI_CACHE_PATH = 'cache/';
         $this->_WPQI_CACHE_CORE_PATH = $this->_WPQI_CACHE_PATH . 'core/';
         $this->_WPQI_CACHE_PLUGINS_PATH = $this->_WPQI_CACHE_PATH . 'plugins/';
-        $this->_RETRY_MAX = 0; //number of retries on a failed ajax request
+        $this->_RETRY_MAX = 5; //number of retries on a failed ajax request
         $this->INSTALLER_DIRECTORY = dirname( dirname( __FILE__ ) ); //no trailing slash. The path to the installer script  
         $this->SITE_CONFIG_FILE_DEFAULTS = $this->INSTALLER_DIRECTORY . '/.defaults-site-config.php';
         $this->PROFILE_CONFIG_FILE_DEFAULTS = $this->INSTALLER_DIRECTORY . '/.defaults-profile-config.php';
@@ -459,6 +459,18 @@ class modwp_install {
      * @return void
      */
     private function _wpCreateWPConfigHome() {
+        //todo: can we turn these into relative paths? if you have to move them between servers its a problem. 
+        //calculate the path 
+        $wp_config_file_path=$this->WP_DIRECTORY . '/wp-config.php';
+        
+        //the path to the included wp_config.php file will be different if its in the webroot or if its in a subdirectory (i.e., whether wp_directory is empty indicating web root)
+        $is_web_root=trim($this->SITE_CONFIG['wp_directory']==='');
+        $wordpress_dir=($is_web_root)?
+                "dirname(__FILE__)" //if in the web root, only need to get directory above.
+                :"dirname(dirname(__FILE__))" //if not in the web root, its in a subdirectory so have to step one more directory above
+            ;
+        $config_file_relative_path='/config/wp-config.php';
+   
 
         $contents = "<?php
 	
@@ -469,10 +481,10 @@ class modwp_install {
 	
 	
 	//check first for a path above the webroot. if not found, use the one in the same directory.
-	if ( file_exists(realpath(dirname(dirname(__FILE__)). '/../config/wp-config.php'))) {
-		include realpath(dirname(dirname(__FILE__)). '/../config/wp-config.php')  ; 
+	if ( file_exists(realpath(dirname($wordpress_dir). \"$config_file_relative_path\") )) {
+		include realpath(dirname($wordpress_dir). \"$config_file_relative_path\")  ; 
 		}else {
-		@include realpath(dirname(__FILE__). '/../config/wp-config.php')  ;
+		include realpath(($wordpress_dir). \"$config_file_relative_path\")   ;
 		
 	}
 
@@ -610,7 +622,7 @@ class modwp_install {
 
 
 
-            $this->_ERROR_MESSAGES[] = gettext( "Cannot download and over-write an existing WordPress Installation. To fix this issue, specify a different install directory, or delete the contents of the existing directory, or set `wpDownload` to false to skip download." );
+            $this->_ERROR_MESSAGES[] = gettext( "You attempted to download and overwrite an existing WordPress Installation. To fix this issue, set \$site[wp_directory] to  a different install directory, delete the WordPress files (excluding the 'mod-wp' directory) in the existing directory " . $this->WP_DIRECTORY . ", or set \$site[wpDownload] to false to skip download. You may also set \$site[reinstall] = true to overwrite the existing WordPress installation." );
             $this->_displayMessages();
             die();
         }
@@ -628,14 +640,14 @@ class modwp_install {
 //if not empty and reinstall is true, delete the database.
 
             if ( !$this->_isDBEmpty() && $this->SITE_CONFIG[ 'reinstall' ] ) {
-
                 $this->_deleteDB();
+           
             } else if ( !$this->_isDBEmpty() ) {
 
 
 
 
-                $this->_ERROR_MESSAGES[] = gettext( 'WordPress database `' ) . $this->SITE_CONFIG[ 'wp_config' ][ 'DB_NAME' ] . gettext( "` is not empty. Either edit site-config.php and set \$site[ 'wpInstallCore' ] to false, empty the existing database `" ) . $this->SITE_CONFIG[ 'wp_config' ][ 'DB_NAME' ] . gettext( "`, or edit site-config.php and set `\$site[ 'wp_config' ][ 'DB_NAME' ]` to a different empty database to use for installation." );
+                $this->_ERROR_MESSAGES[] = gettext( 'WordPress database `' ) . $this->SITE_CONFIG[ 'wp_config' ][ 'DB_NAME' ] . gettext( "` is not empty. To fix this issue, set \$site[ 'wpInstallCore' ] to false, empty the existing database `" ) . $this->SITE_CONFIG[ 'wp_config' ][ 'DB_NAME' ] . gettext( "`, or  set `\$site[ 'wp_config' ][ 'DB_NAME' ]` to a different empty database to use for installation." );
                 $this->_displayMessages();
                 die();
             }
@@ -927,6 +939,7 @@ class modwp_install {
             $this->_LOG_MESSAGES[] = gettext( 'Skipped WordPress Core Installation' );
             $this->_LAST_ACTION = 'wpInstallCore';
             $this->_displayMessages();
+           
 
             return;
         }
@@ -940,14 +953,15 @@ class modwp_install {
                 true //$files_available  #check whether downloaded files are available for installation
         );
 
-
+                    $db = $this->_getDbConnection(); //need to connect (which will also create the db if we need it if we deleted it during the wpcheck if reinstalling)
+// WordPress installation
+                    
+                    
 
         if ( !defined( 'WP_INSTALLING' ) ) {
             define( 'WP_INSTALLING', true );
         }
 
-        $db = $this->_getDbConnection(); //need to connect (which will also create the db if we need it if we deleted it during the wpcheck if reinstalling)
-// WordPress installation
         $install_success = null;
 
 
@@ -962,6 +976,7 @@ class modwp_install {
         }
 
 
+  
         wp_install(
                 $this->SITE_CONFIG[ 'wp_options' ][ 'blogname' ], //$blog_title 
                 $this->SITE_CONFIG[ 'wp_users' ][ 'user_login' ], //$user_name
@@ -970,6 +985,9 @@ class modwp_install {
                 '', //$deprecated
                 $this->SITE_CONFIG[ 'wp_users' ][ 'user_pass' ] //$user_password 
         );
+        
+      
+
 
 
 
@@ -1862,8 +1880,9 @@ class modwp_install {
      * @return void
      */
     public function sandbox() {
-
-
+return;
+$this->_wpCreateWPConfigHome();
+die('exiting in sandbox');
         return;
     }
 
