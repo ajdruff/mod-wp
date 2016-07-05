@@ -410,7 +410,12 @@ class modwp_install {
         switch ( $environment ) {
 
             case "dev":
+                if ( $this->SITE_CONFIG['move_wpconfig']) {                  
                 $config_directory = realpath( dirname( $this->WP_DIRECTORY ) ) . "/config";
+               }else {
+                   
+                   $config_directory = realpath( ( $this->WP_DIRECTORY ) );
+               }                
                 if ( !file_exists( $config_directory ) ) {
 
                     mkdir( $config_directory );
@@ -856,7 +861,11 @@ class modwp_install {
             $this->_wpCreateWPConfig( 'stage' );
         }
         $this->_wpCreateWPConfig( 'dev' ); //when not using slide_rule, we create a local configuration under the config directory. we pass in 'dev' because 'dev' is created under the 'config' directory
+        
+        //modify the wp-config.php home to include the moved wp-config.php file
+         if ( $this->SITE_CONFIG['move_wpconfig']) {    
         $this->_wpCreateWPConfigHome();
+         }
 
         $this->_LOG_MESSAGES[] = gettext( 'Updated wp-config.php with database and site settings' );
 
