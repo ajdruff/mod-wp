@@ -76,6 +76,13 @@ class modwp_install {
         $this->INSTALLER_DIRECTORY = dirname( dirname( __FILE__ ) ); //no trailing slash. The path to the installer script  
         $this->SITE_CONFIG_FILE_DEFAULTS = $this->INSTALLER_DIRECTORY . '/.defaults-site-config.php';
         $this->PROFILE_CONFIG_FILE_DEFAULTS = $this->INSTALLER_DIRECTORY . '/.defaults-profile-config.php';
+        
+        //set max execution time
+        if ( $this->SITE_CONFIG['max_execution_time']!=0 && is_numeric($this->SITE_CONFIG['max_execution_time'])) {
+            ini_set('max_execution_time', $this->SITE_CONFIG['max_execution_time']); 
+        }
+        
+        $this->_SCRIPT_TIMING_INCREMENT=15; #the step increase in max_execution_time each time a task fails before retrying.
 
 
         $this->PROFILES_DIRECTORY = $this->INSTALLER_DIRECTORY . '/profiles';
@@ -902,9 +909,10 @@ class modwp_install {
             } catch ( Exception $exc ) {
 
                 if ( $this->_RETRY < $this->_RETRY_MAX ) {
-//$this->_RETRY=1;   
+   
                     $this->_RETRY = $this->_RETRY + 1;
-// die('executing on exception' . $this->_RETRY);
+                    set_time_limit ($this->_SCRIPT_TIMING_INCREMENT); //sometimes timing is an issue. this increases the timing by XXX seconds each time its called.
+
                     $this->_LOG_MESSAGES[] = "$action failed, retrying (retry count = " . $this->_RETRY . ')';
                     $this->_LAST_ACTION = $this->_INSTALL_ORDER[ $install_key ];
                     $this->_displayMessages();
