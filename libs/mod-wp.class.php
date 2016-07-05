@@ -946,9 +946,7 @@ class modwp_install {
             define( 'WP_INSTALLING', true );
         }
 
-
-
-
+        $db = $this->_getDbConnection(); //need to connect (which will also create the db if we need it if we deleted it during the wpcheck if reinstalling)
 // WordPress installation
         $install_success = null;
 
@@ -1416,12 +1414,9 @@ class modwp_install {
                 if ( !$success ) { //if not successful, throw an exception using the error info
                     $exception = $db->errorInfo();
 
-                 
-                    
-                                    throw new Exception( gettext( "Cannot create the WordPress database " . $this->SITE_CONFIG[ 'wp_config' ][ 'DB_NAME' ] . "  with the user credentials provided. Make sure the user has permissions to create a database, or create it manually using a  tool such as phpMyAdmin, your web hosting control panel,  or  the MySQL command-line tool." ) . "(" . $exception[ 2 ] . ")", $exception[ 1 ] );
-                                    
-                                    
-                    
+
+
+                    throw new Exception( gettext( "Cannot create the WordPress database " . $this->SITE_CONFIG[ 'wp_config' ][ 'DB_NAME' ] . "  with the user credentials provided. Make sure the user has permissions to create a database, or create it manually using a  tool such as phpMyAdmin, your web hosting control panel,  or  the MySQL command-line tool." ) . "(" . $exception[ 2 ] . ")", $exception[ 1 ] );
                 }
             }
 
@@ -1475,7 +1470,7 @@ class modwp_install {
 //returns false if no results, otherwise returns the first table name.
         $result = $db->query( $query, PDO::FETCH_ASSOC )->fetchColumn();
 
-    //     echo ($result===false)?'database is empty':'database is full';
+        //     echo ($result===false)?'database is empty':'database is full';
 
         return ($result === false);
     }
