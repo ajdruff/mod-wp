@@ -69,6 +69,7 @@ $site[ 'reinstall' ] = false; #default false //overwrites existing database and 
 $site[ 'slide_rule' ] = false; #default false; whether to generate additional configuration files for slide_rule
 $site[ 'set_permissions' ] = true; #default true; whether to set secure permissions after installation
 $site['max_execution_time']=0; #default 0 The maximum amount of time a script is allowed to run.
+$site['move_wpconfig']=true; #default true. Whether to move wp_config from web root to its own directory that can be placed above the web root.
 
 
 ?>
