@@ -575,6 +575,7 @@ class modwp_install {
                     'success'//$type
             );
         }
+        die();
     }
 
     /**
@@ -636,6 +637,7 @@ class modwp_install {
 
                 $this->_ERROR_MESSAGES[] = gettext( 'WordPress database `' ) . $this->SITE_CONFIG[ 'wp_config' ][ 'DB_NAME' ] . gettext( "` is not empty. Either edit site-config.php and set \$site[ 'wpInstallCore' ] to false, empty the existing database `" ) . $this->SITE_CONFIG[ 'wp_config' ][ 'DB_NAME' ] . gettext( "`, or edit site-config.php and set `\$site[ 'wp_config' ][ 'DB_NAME' ]` to a different empty database to use for installation." );
                 $this->_displayMessages();
+                die();
             }
         }
     }
@@ -1473,7 +1475,7 @@ class modwp_install {
 //returns false if no results, otherwise returns the first table name.
         $result = $db->query( $query, PDO::FETCH_ASSOC )->fetchColumn();
 
-        // echo ($result===false)?'database is empty':'database is full';
+    //     echo ($result===false)?'database is empty':'database is full';
 
         return ($result === false);
     }
