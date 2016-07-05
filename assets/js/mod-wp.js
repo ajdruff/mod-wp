@@ -290,9 +290,7 @@ $(document).ready(function () {
             var extra_params;
             var form_values = $("#install_form").serialize();
             extra_params = '';
-            if (SITE_CONFIG.reinstall != null) {
-                extra_params = extra_params + '&reinstall=' + SITE_CONFIG.reinstall;
-            }
+
             if (retry > 0) {
                 extra_params = extra_params + '&retry=' + retry;
             }
