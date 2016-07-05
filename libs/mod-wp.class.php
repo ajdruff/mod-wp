@@ -2158,7 +2158,7 @@ die('exiting in sandbox');
         $this->PROFILE_CONFIG_FILE = $this->PROFILE_DIRECTORY . '/profile-config.php';
         if ( !file_exists( $this->PROFILE_CONFIG_FILE ) ) {
 
-            $this->_ERROR_MESSAGES[] = gettext( 'Cannot proceed without a site-config.php file! Create one from `site-config-sample.php`' );
+            $this->_ERROR_MESSAGES[] = gettext( 'Cannot proceed without a valid profile. You want to load the \'' . $this->SITE_CONFIG[ 'profile' ] . '\' profile but  '.$this->PROFILE_DIRECTORY .' was not found! Either set $site[profile] to a valid profile name, or create a new profile under ' .  $this->PROFILE_DIRECTORY . '. You can make a copy of the default profile as a template.'  );
 
 
             $this->_displayMessages( $this->_ERROR_MESSAGES, 'error' );
