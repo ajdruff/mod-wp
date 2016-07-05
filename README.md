@@ -39,6 +39,7 @@ WordPress to install custom content, themes and plugins.
 
 
 1. **Create the WordPress database**
+>**Note: if the database user that you are using to install WordPress includes database creation permissions, you may skip this step **
 
     *by command line:*
 
@@ -154,7 +155,7 @@ If you run the installer and forget to note the password, you'll be locked out o
 
 
 
-#Configuration 
+#Mod WP Configuration 
 
 Configuration settings are divided into 2 categories, *Site* and *Profile* which are contained in the `site-config.php` and `profile-config.php` files. 
 
@@ -167,11 +168,16 @@ The `site-config.php` file contains site specific settings, such as the name of 
 For available Site settings, see the `site-config-sample.php` file. Below are selected settings with additional explanation beyond the comments in the configuration file:
 
 * $site[ 'HTTP_HOST' ]  
+    - default: example.com
     - used to tell the command line what domain to use when generating the WordPress site and home urls. This is **required** to be set for any command line installs. Its not used for Web Based installations since the HTTP_HOST server variable is made available by the web server.
+
 * $site[ 'slide_rule' ]  
-    - Normally false. This determines whether additional configuration files are generated for the dev and staging environments used by the [Slide Rule project](https://github.com/ajdruff/slide-rule)
+    - default:false 
+    - This determines whether additional configuration files are generated for the dev and staging environments used by the [Slide Rule project](https://github.com/ajdruff/slide-rule)
 
-
+* $site[ 'move_wpconfig' ]  
+    - default:true 
+    - This determines whether the `wp-config.php` file is moved to a separate config directory that can be placed in the same directory as root (default) or, more securely, above the web root. 
 
 **Profile Configuration**
 
@@ -192,13 +198,7 @@ To create a new profile, copy the `profiles/default` directory and rename it to 
 
 For available Profile settings, see the `profiles/default/profile-config.php` file. 
 
-
-**Default Configuration Settings**
-
-Hidden configuration files `.defaults-site-config.php` and `.defaults-profile-config.php` are loaded before any other configuration files are loaded to provide the 'factory defaults' for all settings. They should never be edited and will be overridden by any settings that you set in `site-config.php` or the `profile-config.php` files . If you forget (or delete) a setting in either of those two files, the settings from the .defaults files will be used.
-
-
-#Leverage Profiles to save time
+**Leverage Profiles to save time**
 
 Here are some ways you can use profiles to save time:
 
@@ -206,6 +206,36 @@ Here are some ways you can use profiles to save time:
 * Create a profile for each client so you know exactly what was installed and so you can replicate their installation for similar sites they may want to build.
 * Use GitHub to share profiles with your team. Use your source control repository such as GitHub to share installation profiles that work best for your team.
 
+**Default Configuration Settings**
+
+Hidden configuration files `.defaults-site-config.php` and `.defaults-profile-config.php` are loaded before any other configuration files are loaded to provide the 'factory defaults' for all settings. They should never be edited and will be overridden by any settings that you set in `site-config.php` or the `profile-config.php` files . If you forget (or delete) a setting in either of those two files, the settings from the .defaults files will be used.
+
+
+#WordPress Configuration 
+
+**How Mod WP Configures WordPress**
+
+Mod WP takes the settings found in your `site-config.php` and `profile-config.php` files that are identified as `$site[wp_config]` or `$profile[wp_config]` and creates a customized `wp-config.php` file that includes those settings. 
+
+In addition, it updates the `wp_options` database table with any settings that are identified as $site[wp_options] or $profile[wp_options].
+
+Other modifications it makes:
+
+* moves the wp-config.php to its own separate directory (see the next section for more information)
+* updates wp-config.php with custom salts
+* optionally creates  `_live` , `_stage`, and `_dev` `wp-config.php` files when used with the [Slide Rule project](https://github.com/ajdruff/slide-rule) ( set $site['slide_rule'] to true);
+
+If you'd like to re-configure WordPress without overwriting your site's installation, you can do so by setting all 'Selective Installation Tasks' to false except wpConfig which should be set to true.
+
+**Location of wp-config.php**
+
+The `wp-config.php` file contains your database username and password, and many other settings used by WordPress to configure your site. A typical installation of WordPress places this file alongside the other files contained in the WordPress installation directory, above your web server's root directory. 
+
+With the right file permissions, this location can be fine in terms of security, but some prefer `wp-config.php` to be located outside the web root to further protect against unauthorized viewing or editing.
+
+By default, Mod WP creates a directory `config` in the WordPress directory and places `wp-config.php` file within it, and then modifies the `wp-config.php` contained in the WordPress installation directory to  include  `config/wp-config.php`. The user may then keep the `config` directory in the web root, or move it above the web root. Either way, Mod WP makes sure that WordPress can find it.
+
+To disable this default behavior of moving the wp-config.php file, set $site['move_wpconfig'] to true. This will keep `wp-config.php` alongside the other files as intended with a typical installation.
 
 
 
@@ -316,12 +346,12 @@ You can override  both  a site configuration and a profile configuration value u
 
 
 
-**Exception Info**
+##Exception Info
 
 You can get more info on exceptions by setting $site[ 'debug-show-exceptions' ] = true;
 
 
-**Persistent retrys**
+##Persistent retrys
 
 A 'retry' mechanism was added to try to overcome what is usually a timing limitation that doesn't always allow wpUnzip or wpConfig to complete. A number of retrys for each installation task are attempted and if they all fail, the installation fails. 
 
