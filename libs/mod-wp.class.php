@@ -462,7 +462,7 @@ class modwp_install {
             }
             fclose( $handle );
 
-// We set the good rights to the wp-config file
+// set permissions to wp-config.php
             chmod( $config_directory . '/wp-config.php', $this->_CONFIG_FILE_PERMISSIONS );
         }
 
@@ -784,7 +784,7 @@ class modwp_install {
 
             mkdir( $this->WP_DIRECTORY );
 
-// We set the good writing rights
+// Set directory permissions
             chmod( $this->WP_DIRECTORY, 0755 );
         }
 
@@ -2283,11 +2283,12 @@ class modwp_install {
             'wpInstallThemes',
             'wpInstallPlugins',
             'wpResetPassword',
+            'wpSetPermissions',
             'wpSuccessMessage',
             'wpUpdateHtaccess' //must be at end so rules can flush properly
         );
     }
-//            'wpSetPermissions',
+//            
     /**
      * Get Messages HTML
      *
@@ -2517,7 +2518,7 @@ class modwp_install {
                 $this->_FILE_PERMISSIONS, //file permissions
                 $this->_DIRECTORY_PERMISSIONS //directory permissions
         );
-        chmod( $this->WP_DIRECTORY . '/.htaccess', $this->_CONFIG_FILE_PERMISSIONS );
+        chmod( $this->WP_DIRECTORY . '/.htaccess', $this->_FILE_PERMISSIONS ); //htaccess needs 0644 or it will give forbidden error.
         chmod( $this->WP_DIRECTORY . '/wp-config.php', $this->_CONFIG_FILE_PERMISSIONS );
         
                 $this->_LOG_MESSAGES[]='set file permissions';
