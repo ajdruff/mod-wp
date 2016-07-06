@@ -2283,9 +2283,9 @@ class modwp_install {
             'wpInstallThemes',
             'wpInstallPlugins',
             'wpResetPassword',
-            'wpSetPermissions',
             'wpSuccessMessage',
-            'wpUpdateHtaccess' //must be at end so rules can flush properly
+            'wpUpdateHtaccess', //must be at end so rules can flush properly
+            'wpSetPermissions'			
         );
     }
 //            
@@ -2520,7 +2520,7 @@ class modwp_install {
         );
         chmod( $this->WP_DIRECTORY . '/.htaccess', $this->_FILE_PERMISSIONS ); //htaccess needs 0644 or it will give forbidden error.
         chmod( $this->WP_DIRECTORY . '/wp-config.php', $this->_CONFIG_FILE_PERMISSIONS );
-        chmod( $this->WP_DIRECTORY . '/site-config.php', $this->_CONFIG_FILE_PERMISSIONS ); //site-config.php to protect our database password
+        chmod( $this->INSTALLER_DIRECTORY . '/site-config.php', $this->_CONFIG_FILE_PERMISSIONS ); //site-config.php to protect our database password
         
                 $this->_LOG_MESSAGES[]='set file permissions';
                 $this->_LAST_ACTION = 'wpSetPermissions';
