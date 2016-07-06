@@ -154,7 +154,7 @@ class modwp_install {
 
 
 // Build the absolute path of the configured director. If not provided, use the parent directory of this file
-        $this->WP_DIRECTORY = !empty( $this->SITE_CONFIG[ 'wp_directory' ] ) ? dirname( $this->INSTALLER_DIRECTORY ) . '/' . $this->SITE_CONFIG[ 'wp_directory' ] . '/' : dirname( $this->INSTALLER_DIRECTORY ) . '/';
+        $this->WP_DIRECTORY = !empty( $this->SITE_CONFIG[ 'wp_directory' ] ) ? dirname( $this->INSTALLER_DIRECTORY ) . '/' . $this->SITE_CONFIG[ 'wp_directory' ]  : dirname( $this->INSTALLER_DIRECTORY ) ;
 
 
 
@@ -262,7 +262,7 @@ class modwp_install {
 
         if ( !empty( $this->PROFILE_CONFIG[ 'wp_options' ][ 'permalink_structure' ] ) ) {
 
-            file_put_contents( $this->WP_DIRECTORY . '.htaccess', null );
+            file_put_contents( $this->WP_DIRECTORY . '/.htaccess', null );
             flush_rewrite_rules();
         }
 
@@ -291,7 +291,7 @@ class modwp_install {
           /*-------------------------- */
 
 // We retrieve each line as an array
-        $wp_config = file( $this->WP_DIRECTORY . 'wp-config-sample.php' );
+        $wp_config = file( $this->WP_DIRECTORY . '/wp-config-sample.php' );
 
 // Managing the security keys
         $secret_keys = explode( "\n", file_get_contents( 'https://api.wordpress.org/secret-key/1.1/salt/' ) );
@@ -610,7 +610,11 @@ class modwp_install {
                     'success'//$type
             );
         }
+        
+        //exit the script if this is a web request since ajax is done once it shows the result.
+        if ( !$this->isCommandLine()) {  
         die();
+          }
     }
 
     /**
@@ -622,9 +626,10 @@ class modwp_install {
      * @param boolean $dbempty True to check if database is empty (returns error if it isn't)
      * @param boolean $files_overwrite True to check if files were downloaded but are in danger of being overwritten  (returns error if files exist)
      * @param boolean $files_available True to check if files are available for including (returns error if files don't exist)
+     * @param boolean $cmd_requirements True to check for command line requirements ( HTTP variable set,etc).
      * @return void
      */
-    public function wpCheck( $dbconnect, $dbempty, $files_overwrite, $files_available ) {
+    public function wpCheck( $dbconnect, $dbempty, $files_overwrite, $files_available,$cmd_requirements=null ) {
 
         $db = null;
         /* -------------------------- */
@@ -640,7 +645,7 @@ class modwp_install {
 
 
 // WordPress Downloaded but in danger of being overwritten?
-        if ( $files_overwrite && file_exists( $this->WP_DIRECTORY . 'wp-includes' ) && $this->SITE_CONFIG[ 'reinstall' ] !== true ) {
+        if ( $files_overwrite && file_exists( $this->WP_DIRECTORY . '/wp-includes' ) && $this->SITE_CONFIG[ 'reinstall' ] !== true ) {
 
 
 
@@ -650,7 +655,7 @@ class modwp_install {
             die();
         }
 // WordPress Available?
-        if ( $files_available && !file_exists( $this->WP_DIRECTORY . 'wp-includes' ) ) {
+        if ( $files_available && !file_exists( $this->WP_DIRECTORY . '/wp-includes' ) ) {
             $this->_ERROR_MESSAGES[] = gettext( "WordPress has not been downloaded yet into the configured directory set by `\$site[ 'wp_directory' ]` (" . $this->SITE_CONFIG[ 'wp_directory' ] . ") Please download WordPress by editing `site-config.php` and setting `\$site[ 'wpDownload' ]=true` or set `\$site[ 'wp_directory' ] to a directory that contains the downloaded WordPress files." );
             $this->_displayMessages();
             die();
@@ -673,6 +678,15 @@ class modwp_install {
                 $this->_displayMessages();
                 die();
             }
+        }
+        
+        if ( $cmd_requirements ) {
+                    if ( $this->SITE_CONFIG[ 'HTTP_HOST' ]==='example.com' || trim($this->SITE_CONFIG[ 'HTTP_HOST' ])==='') {
+
+                            $this->_ERROR_MESSAGES[] = gettext( 'You must set $site[ \'HTTP_HOST\' ] to a valid domain before installing or your site will not be accessible once installed.' ) ;
+                $this->_displayMessages();
+                die();
+        }
         }
     }
 
@@ -976,7 +990,8 @@ class modwp_install {
                 true, //$dbconnect #check connection
                 true, //$dbempty   #check whether database is empty
                 false, //$files_overwrite #check whether download will overwrite existing files
-                true //$files_available  #check whether downloaded files are available for installation
+                true, //$files_available  #check whether downloaded files are available for installation
+                true //$cmd_requirements #check that HTTP_HOST is set,etc.             
         );
 
         $db = $this->_getDbConnection(); //need to connect (which will also create the db if we need it if we deleted it during the wpcheck if reinstalling)
@@ -1019,9 +1034,9 @@ class modwp_install {
 
 //delete the install drop in now that its not needed      
 //if you don't delete it, a reinstall may execute it even if install_dropin is set to false
-        if ( file_exists( $this->WP_DIRECTORY . 'wp-content/install.php' ) ) {
+        if ( file_exists( $this->WP_DIRECTORY . '/wp-content/install.php' ) ) {
 
-            $this->phpLib()->rmDir( $this->WP_DIRECTORY . 'wp-content/install.php' );
+            $this->phpLib()->rmDir( $this->WP_DIRECTORY . '/wp-content/install.php' );
         }
 
 
@@ -1083,7 +1098,7 @@ class modwp_install {
         if ( $this->PROFILE_CONFIG[ 'install_dropin' ] ) {
 
 
-            copy( $this->INSTALLER_DIRECTORY . "/install_dropin.php", $this->WP_DIRECTORY . 'wp-content/install.php' );
+            copy( $this->INSTALLER_DIRECTORY . "/install_dropin.php", $this->WP_DIRECTORY . '/wp-content/install.php' );
 
             $this->_LOG_MESSAGES[] = "Added Install Dropin file to override wp_install_defaults()";
         }
@@ -1298,7 +1313,7 @@ class modwp_install {
             $plugins = $this->PROFILE_CONFIG[ 'plugins' ];
 
 
-            $plugins_dir = $this->WP_DIRECTORY . 'wp-content/plugins/';
+            $plugins_dir = $this->WP_DIRECTORY . '/wp-content/plugins/';
 
 
             foreach ( $plugins as $plugin ) {
@@ -1363,10 +1378,10 @@ class modwp_install {
         if ( $this->PROFILE_CONFIG[ 'activate_plugins' ] == 1 ) {
 
             /** Load WordPress Bootstrap */
-            require_once( $this->WP_DIRECTORY . 'wp-load.php' );
+            require_once( $this->WP_DIRECTORY . '/wp-load.php' );
 
             /** Load WordPress Plugin API */
-            require_once( $this->WP_DIRECTORY . 'wp-admin/includes/plugin.php');
+            require_once( $this->WP_DIRECTORY . '/wp-admin/includes/plugin.php');
 
 // Activation
             activate_plugins( array_keys( get_plugins() ) );
@@ -1392,10 +1407,10 @@ class modwp_install {
 
 
         $wp_library = array(
-            $this->WP_DIRECTORY . 'wp-admin/includes/functions.php',
-            $this->WP_DIRECTORY . 'wp-load.php',
-            $this->WP_DIRECTORY . 'wp-admin/includes/upgrade.php',
-            $this->WP_DIRECTORY . 'wp-includes/wp-db.php'
+            $this->WP_DIRECTORY . '/wp-admin/includes/functions.php',
+            $this->WP_DIRECTORY . '/wp-load.php',
+            $this->WP_DIRECTORY . '/wp-admin/includes/upgrade.php',
+            $this->WP_DIRECTORY . '/wp-includes/wp-db.php'
         );
 
         foreach ( $wp_library as $filepath ) {
@@ -1558,7 +1573,7 @@ class modwp_install {
         }
 
 
-        $this->_LOG_MESSAGES[] = 'Existing Database was found and deleted';
+        $this->_LOG_MESSAGES[] = 'Existing Database ' .$this->SITE_CONFIG[ 'wp_config' ]['DB_NAME'].'  was found and deleted (reinstall is set to true)';
 
 
         return ($result);
@@ -1689,7 +1704,7 @@ class modwp_install {
         $tags[ '{USERNAME}' ] = $this->SITE_CONFIG[ 'wp_users' ][ 'user_login' ];
         $tags[ '{PASSWORD_LABEL}' ] = gettext( 'password:' );
         $tags[ '{PASSWORD}' ] = $this->SITE_CONFIG[ 'wp_users' ][ 'user_pass' ];
-        $tags[ '{RESET_INSTRUCTIONS}' ] = gettext( "This password will not be emailed to you. If you need to reset it, re-run the setup script using \$site[ 'wpResetPassword' ]=true and  \$site[ 'wpInstallCore' ]=false or use WordPress\'s \'lost password\' feature." );
+        $tags[ '{RESET_INSTRUCTIONS}' ] = gettext( "This password will not be emailed to you. If you need to reset it, re-run the setup script using \$site[ 'wpResetPassword' ]=true and  \$site[ 'wpInstallCore' ]=false or use WordPress's 'lost password' feature." );
 
         $template = '<strong style="margin:5px">{TITLE}</strong>'
                 . '<div><a href={HOME_URL} class="btn btn-default" target="_blank">{HOME_PAGE_LINK_TEXT}</a>'
@@ -1887,7 +1902,7 @@ class modwp_install {
                 }
             } else {
 //if a file, delete it unless its wp-plugins/index.php
-                if ( realpath( $file->getPathname() ) !== realpath( $this->WP_DIRECTORY . 'wp-content/themes/index.php' ) ) {
+                if ( realpath( $file->getPathname() ) !== realpath( $this->WP_DIRECTORY . '/wp-content/themes/index.php' ) ) {
 
                     unlink( $file );
                 }
@@ -1940,7 +1955,7 @@ class modwp_install {
                 $theme_name = str_replace( '/', '', $stat[ 'name' ] );
 
 // We unzip the archive in the themes folder
-                $zip->extractTo( $this->WP_DIRECTORY . 'wp-content/themes/' );
+                $zip->extractTo( $this->WP_DIRECTORY . '/wp-content/themes/' );
                 $zip->close();
 
 // Let's activate the theme
@@ -2268,12 +2283,11 @@ class modwp_install {
             'wpInstallThemes',
             'wpInstallPlugins',
             'wpResetPassword',
-            'wpSetPermissions',
             'wpSuccessMessage',
             'wpUpdateHtaccess' //must be at end so rules can flush properly
         );
     }
-
+//            'wpSetPermissions',
     /**
      * Get Messages HTML
      *
