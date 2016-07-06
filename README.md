@@ -5,11 +5,11 @@ WordPress to install custom content, themes and plugins.
 
 #Why use Mod WP to install WordPress?
 
-* You always get the latest version of WordPress and plugins
-* You can add custom pages and posts
-* You can add custom plugins and themes
-* You can remove default WordPress content like the 'Hello World' post and comments.
-* You can remove the default plugins and themes like TwentyEleven and Hello Dolly
+With Mod WP you can:
+
+* Be sure you always get latest version of WordPress and plugins with each installation
+* Add custom pages, posts, plugins, and themes 
+* Remove default WordPress content, plugins and themes. No more 'Hello Dolly' plugin, or 'Hello World' post to delete.
 
 
 **What makes Mod WP better than other installation scripts?**
@@ -17,12 +17,11 @@ WordPress to install custom content, themes and plugins.
 * **Installation Profiles** - You can create one installation profile and reuse it for multiple site setups. For example, does one of your clients have a set of plugins they always want activated? No problem, create one profile for them and reuse it for each install - you'll always install the latest plugin versions and even install their premium themes or plugins.
 * **Choice of either a Web Form or Command Line Interface** 
     Install WordPress using Mod WP's web form for a quick point and click installation, call it from the command line or even integrate it into your own deployment scripts.
-* **No special installation requirements**. Mod WP doesn't use bash or anything other than whats required for a typical WordPress installation.
-* **More secure**
-    -   You are never allowed to choose your own WP Admin password on installation, the script always creates one for you. 
-    -   wp-config.php is moved to outside the web root.
-    -   Secure File permissions are set automatically.
-    -   Your database username and password aren't exposed over the web form.
+* **No special installation requirements**. Mod WP uses pure PHP to install WordPress, so if your server supports WordPress, it will support Mod WP.
+* **Password Handling**
+    -   Mod WP always generates your WordPress Admin password, ensuring a unique and complex password for each install.
+    -   Mod WP provides an option to move your wp-config.php file outside the web root, potentially making it harder for an attacker to grab your database password.
+    -   Mod WP doesn't allow you to edit your database username and password over the installation web form, thereby preventing accidental exposure over the web if accessing the installation form over a non-https channel.
 
 
 
@@ -136,10 +135,26 @@ WordPress to install custom content, themes and plugins.
 
 
 
-##Security Precautions
->Always delete the `mod-wp` directory or at least the `site-config.php` when you are done with installation. The site-config.php file contains your database password and username and any attacker will be able to compromise your site resulting in data compromise and/or loss. 
-Maintain proper file permissions for the wp-config.php files that are generated. Mod WP attempts to set recommended file permissions for all files, but its your responsibility to check that permissions are set properly for your risk environment.
+##Security
 
+>**Always delete the `mod-wp` directory** or at least the `site-config.php` when you are done with installation. The site-config.php file contains your database password and username and any attacker will be able to compromise your site resulting in data compromise and/or loss. 
+Maintain proper file permissions for the wp-config.php files that are generated. 
+
+**File and Directory Permissions**
+Mod WP attempts to set recommended file permissions for all files, but you'll need to check that permissions are set properly for your risk environment. Setting permissions via PHP script sometimes fails silently due to the specifics of a particular site's configuration. 
+
+**Bash script to set permissions**
+
+Sometimes, the PHP script may fail to set the correct permissions. Mod WP comes with a bash script that you can use to execute recommended file permissions:
+
+    cd /path/to//mod-wp/libs/
+    ./set-perms.sh /path/to/wordpress
+
+>**Permissions provided are not necessarily appropriate for your risk environment.**
+
+**WordPress Hardening**
+
+Since there are many different ways to harden WordPress, some with significant tradeoffs to performance and convienance, Mod WP doesn't attempt to harden WordPress. 
 
 
 #Passwords
