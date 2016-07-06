@@ -128,6 +128,7 @@ With Mod WP you can:
     ** *Run the Installer Using the Command Line* **
 
             cd /path/to/mod-wp/
+            chmod +x ./index.php
             php index.php
 
     >You may have to use the absolute path to the php executable if you start receiving errors, e.g:     `/c/UwAmp/bin/php/php-5.3.25/php" -f index.php`
@@ -141,14 +142,15 @@ With Mod WP you can:
 Maintain proper file permissions for the wp-config.php files that are generated. 
 
 **File and Directory Permissions**
-Mod WP attempts to set recommended file permissions for all files, but you'll need to check that permissions are set properly for your risk environment. Setting permissions via PHP script sometimes fails silently due to the specifics of a particular site's configuration. 
+Mod WP attempts to set recommended file permissions for all files, but you'll need to check that permissions are set properly for your risk environment. Setting permissions via PHP script sometimes fails silently due to the specifics of a particular site's configuration. For example, PHP `chmod` frequently fails in cygwin environments since the newer versions of cygwin rely on `setfacl` vs `chmod`. 
 
-**Bash script to set permissions**
+**Setting Permissions Using the bash script set-perms.sh**
 
 Sometimes, the PHP script may fail to set the correct permissions. Mod WP comes with a bash script that you can use to execute recommended file permissions:
 
     cd /path/to//mod-wp/libs/
-    ./set-perms.sh /path/to/wordpress
+    chmod +x ./set-perms.sh
+    ./set-perms.sh /absolute/path/to/wordpress
 
 >**Permissions provided are not necessarily appropriate for your risk environment.**
 
@@ -473,13 +475,42 @@ When you browse to your WordPress site after installation, pages may appear unst
 
 To fix this, simply re-install, setting all options under the Selective Installation tasks to true , except for `$site['wpResetPassword'] which should be set to false. You will also have to set $site['reinstall']=true to overwrite your existing database settings. Be aware that this will overwrite your database and the files in your installation directory.
 
-If overwriting is not an option  if you are worried about losing data, you can go set the following in your wp-config.php file:
+If overwriting is not an option  if you are worried about losing data, you can add the following in your wp-config.php file and you should be able to access your site:
 
     define('WP_SITEURL','/path/to/your/wordpress/directory')
 
 
 
+**WordPress page is blank or not accessible after installing from command line**
 
+Verify that you $site['HTTP_HOST'] setting is correct and is an accessible domain name that points to the web root that contains your WordPress directory.
+
+
+
+**Access Denied Errors**
+
+You may receive the following types of errors if you are trying to run Mod WP from the command line but are doing it from a shell account that doesn't have permissions to required directories and files:
+
+    Warning: rename(wordpress/wp-content,/path/to/wordpress/wp-content): Access is denied. (code: 5) in mod-wp\libs\mod-wp.class.php on line 806
+
+
+
+ or 
+
+
+
+    ERRORS:WordPress has not been downloaded yet ...
+
+To fix these errors, you'll need to first login as the owner of the files, or, alternately, change the ownership of all the files to your account.
+
+This is a common issue in cygwin environments where you are trying to install using a console shell that is using a different account than what the server (uWamp/WAMP) used in creating the files.  If, for example, you tried to use a Git for Windows shell to run the script, you'll receive these errors. The fix would be switch to a cygwin shell , verify you have access to the required files, and run  Mod WP from that shell.
+
+
+**WordPress has not been downloaded yet**
+
+Usually this error is exactly as it says and you should follow its instructions on how to fix it. The WordPress directory is empty and you are trying to proceed to install without any of the files needed to do the installation.
+
+Alternately, it may  be a result of permissions issues preventing Mod WP from viewing the files that you downloaded. See 'Access Denied Errors'
 
 **Memory Errors**
 
