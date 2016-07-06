@@ -674,7 +674,7 @@ class modwp_install {
 
 
 
-                $this->_ERROR_MESSAGES[] = gettext( 'WordPress database `' ) . $this->SITE_CONFIG[ 'wp_config' ][ 'DB_NAME' ] . gettext( "` is not empty. To fix this issue, set \$site[ 'wpInstallCore' ] to false, empty the existing database `" ) . $this->SITE_CONFIG[ 'wp_config' ][ 'DB_NAME' ] . gettext( "`, or  set `\$site[ 'wp_config' ][ 'DB_NAME' ]` to a different empty database to use for installation." );
+                $this->_ERROR_MESSAGES[] = gettext( 'WordPress database `' ) . $this->SITE_CONFIG[ 'wp_config' ][ 'DB_NAME' ] . gettext( "` is not empty. To fix this issue, set \$site[ 'wpInstallCore' ] to false, empty the existing database `" ) . $this->SITE_CONFIG[ 'wp_config' ][ 'DB_NAME' ] . gettext( "`, or  set `\$site[ 'wp_config' ][ 'DB_NAME' ]` to a different empty database to use for installation.You may also set \$site[reinstall] = true to overwrite the existing WordPress database." );
                 $this->_displayMessages();
                 die();
             }
