@@ -1906,52 +1906,7 @@ class modwp_install {
      * @return void
      */
     public function sandbox() {
-        
 
-        
-        
-        $this->WP_DIRECTORY='E:\users\dev_cygwin\cygwin\home\adruff\wamp-www\mod-wp/public_html/wordpress2';
-        
-        $this->_FILE_PERMISSIONS=0642;
-        $this->_DIRECTORY_PERMISSIONS=0755;
-        
-     #  echo chmod($this->WP_DIRECTORY . "/config",octdec(755));
-       echo get_current_user ();
-           $file = dirname(__FILE__) . '/test.txt';
-ini_set('display_errors', true);
-// Write the contents back to the file
-//file_put_contents($file, 'test');
-
-
-//$output = exec('chmod 0666 ' . $file);
-
-$output = exec('C:\cygwin\bin\chmod.exe ' . 666  . $file);
-$output = exec('C:\cygwin\bin\ls.exe -ail '. $file);
-
-echo "<pre>result: $output</pre>";
-
-
-//chmod($file,0666);
-die('exit' . __FILE__);
-       
-       $this->phpLib()->chmodR(
-                $this->WP_DIRECTORY . "/config", 
-                $this->_FILE_PERMISSIONS, //file permissions
-                $this->_DIRECTORY_PERMISSIONS //directory permissions
-        );
-       
-       
-            die('set file permissions');    
-                $this->phpLib()->chmod(
-                $this->WP_DIRECTORY, 
-                $this->_FILE_PERMISSIONS, //file permissions
-                $this->_DIRECTORY_PERMISSIONS //directory permissions
-        );
-                echo chmod($this->WP_DIRECTORY,$this->_DIRECTORY_PERMISSIONS);
-            die('set file permissions');    
-        return;
-        $this->_wpCreateWPConfigHome();
-        die( 'exiting in sandbox' );
         return;
     }
 
@@ -2543,7 +2498,7 @@ die('exit' . __FILE__);
      */
     public function wpSetPermissions() {
 
-        $this->phpLib()->chmod(
+        $this->phpLib()->chmodR(
                 $this->WP_DIRECTORY, 
                 $this->_FILE_PERMISSIONS, //file permissions
                 $this->_DIRECTORY_PERMISSIONS //directory permissions

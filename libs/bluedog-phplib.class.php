@@ -202,39 +202,14 @@ class bluedog_phplib {
         return $merged;
     }
 
+
     /**
      * Change File and Directory Permissions
      *
      * Change the permissions of all files and directories recursively
      *
-     * @param $file_perm - File permissions, e.g.: 0600
-     * @param $file_perm - Directory permissions, e.g: 0755
-     * @return void
-     */
-    public function chmod_old( $path, $file_perm, $dir_perm ) {
-
-
-        try {
-            $dir = new DirectoryIterator( $path );
-            foreach ( $dir as $item ) {
-                if ( $item->isDir() && !$item->isDot() ) {
-                    chmod( $item->getPathname(), $dir_perm ); //set the directory permission
-                 //   $this->chmod( $item->getPathname(), $file_perm, $dir_perm ); //iterate into the directory
-                } else if ( !$item->isDir() && !$item->isDot() ) {
-                    chmod( $item->getPathname(), $file_perm );
-                }
-            }
-        } catch ( Exception $exc ) {
-            echo $exc->getTraceAsString();
-        }
-    }
-    /**
-     * Change File and Directory Permissions
-     *
-     * Change the permissions of all files and directories recursively
-     *
-     * @param $file_perm - File permissions, e.g.: 0600
-     * @param $file_perm - Directory permissions, e.g: 0755
+     * @param $filemode - File permissions, e.g.: 0600
+     * @param $dirmode - Directory permissions, e.g: 0755
      * @return void
      */
     
