@@ -11,7 +11,6 @@
  * @package PHPLib
  * @filesource
  */
-
 class bluedog_phplib {
 
     /**
@@ -30,19 +29,17 @@ class bluedog_phplib {
     public function rmDirMaybe( $dir, $exceptions = array(), $delete_if_empty = true ) {
         if ( !file_exists( $dir ) ) {
             return false;
-}
+        }
         $result = false;
 
         //if given a file instead of a directory, deletes it if not an exception and returns the result
         if ( !is_dir( $dir ) ) {
             if ( in_array( basename( $dir ), $exceptions ) ) {
                 return true; //given a file, but the file was in the exceptions array, so no action needed
-             } else {
+            } else {
                 return( unlink( $dir ));
-             }
-
-
-}
+            }
+        }
 
         //scandir returns all the folder and file names in the directory (non-recursive), 
         $fileNames = scandir( $dir );
@@ -56,34 +53,20 @@ class bluedog_phplib {
         foreach ( $fileNames as $file ) {
             if ( in_array( $file, $exceptions ) ) {
                 continue;
-}
+            }
             if ( is_dir( $dir . "/$file" ) ) {
                 $this->rmDir( $dir . "/$file" );
-} else
-    {
+            } else {
                 unlink( $dir . "/$file" );
-
-
-
-}
-
-
-
-
-
-
-
-
-}
+            }
+        }
 
 
 
         if ( $delete_if_empty ) { @rmdir( $dir ); }
 
         return $result;
-
-
- }
+    }
 
     /**
      * Removes a Directory and All Its Contents or if given a file, deletes it.
@@ -98,14 +81,13 @@ class bluedog_phplib {
     public function rmDir( $dir ) {
         if ( !file_exists( $dir ) ) {
             return true;
-}
+        }
         $result = false;
 
         //if given a file instead of a directory, deletes it and returns true
         if ( !is_dir( $dir ) ) {
             return( unlink( $dir ));
-
-}
+        }
         $di = new RecursiveDirectoryIterator( $dir, FilesystemIterator::SKIP_DOTS );
         $ri = new RecursiveIteratorIterator( $di, RecursiveIteratorIterator::CHILD_FIRST );
         foreach ( $ri as $fileSystemObject ) {
@@ -118,23 +100,15 @@ class bluedog_phplib {
             if ( $fileSystemObject->isDir() ) {
 
                 $result = rmdir( $fileSystemObject );
-
-
-
-} else {
+            } else {
                 $result = unlink( $fileSystemObject );
-
-}
-
-
-}
+            }
+        }
 
         $result = rmdir( $dir ); //now that the directory contents are deleted, remove the directory itself.
 
         return $result;
-
-
-}
+    }
 
     /**
      * Delete a file
@@ -153,13 +127,12 @@ class bluedog_phplib {
             if ( file_exists( $path ) ) {
                 unlink( $path );
                 $result = true;
-}
-} catch ( Exception $exc ) {
+            }
+        } catch ( Exception $exc ) {
             $result = false;
-}
+        }
 
         return $result;
-
     }
 
     /**
@@ -170,12 +143,10 @@ class bluedog_phplib {
      * @param none
      * @return boolean True if ajax, false if not.
      */
-    public function isAjax( ) {
-            return(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
-
-
+    public function isAjax() {
+        return(isset( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] ) && !empty( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] ) && strtolower( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] ) == 'xmlhttprequest');
     }
-    
+
     /**
      * Short Description
      *
@@ -185,31 +156,26 @@ class bluedog_phplib {
      * @return void
      */
     public function convertToBool( $mixed ) {
-         
-        $boolean_strings=array('1','0','on','off','true','false','yes','no');
-        if ( !is_array($mixed)) {
-          
-           return filter_var($mixed, FILTER_VALIDATE_BOOLEAN);
-        }else {
-               
-            foreach ( $mixed as $key=>$value ) {
-                if ( is_array($value)) {
-                    $mixed[$key]=$this->convertToBool($value);
-                }else {
-                    if ( in_array(trim((string)$mixed[$key]),$boolean_strings)) {
-                       $mixed[$key]=filter_var($mixed[$key], FILTER_VALIDATE_BOOLEAN);  
-                    }
 
-                   
-                    
+        $boolean_strings = array( '1', '0', 'on', 'off', 'true', 'false', 'yes', 'no' );
+        if ( !is_array( $mixed ) ) {
+
+            return filter_var( $mixed, FILTER_VALIDATE_BOOLEAN );
+        } else {
+
+            foreach ( $mixed as $key => $value ) {
+                if ( is_array( $value ) ) {
+                    $mixed[ $key ] = $this->convertToBool( $value );
+                } else {
+                    if ( in_array( trim( ( string ) $mixed[ $key ] ), $boolean_strings ) ) {
+                        $mixed[ $key ] = filter_var( $mixed[ $key ], FILTER_VALIDATE_BOOLEAN );
+                    }
                 }
             }
-
-          
         }
- return $mixed;
+        return $mixed;
     }
-    
+
     /**
      * Recursive Array Merge
      *
@@ -220,28 +186,86 @@ class bluedog_phplib {
      * 
      * @return void
      */
+    function arrayMerge( array & $array1, array & $array2 ) {
+        $merged = $array1;
 
-    
-    function arrayMerge(array & $array1, array & $array2)
-{
-    $merged = $array1;
+        foreach ( $array2 as $key => & $value ) {
+            if ( is_array( $value ) && isset( $merged[ $key ] ) && is_array( $merged[ $key ] ) ) {
+                $merged[ $key ] = $this->arrayMerge( $merged[ $key ], $value );
+            } else if ( is_numeric( $key ) ) {
+                if ( !in_array( $value, $merged ) )
+                    $merged[] = $value;
+            } else
+                $merged[ $key ] = $value;
+        }
 
-    foreach ($array2 as $key => & $value)
-    {
-        if (is_array($value) && isset($merged[$key]) && is_array($merged[$key]))
-        {
-            $merged[$key] = $this->arrayMerge($merged[$key], $value);
-        } else if (is_numeric($key))
-        {
-             if (!in_array($value, $merged))
-                $merged[] = $value;
-        } else
-            $merged[$key] = $value;
+        return $merged;
     }
 
-    return $merged;
-}
+    /**
+     * Change File and Directory Permissions
+     *
+     * Change the permissions of all files and directories recursively
+     *
+     * @param $file_perm - File permissions, e.g.: 0600
+     * @param $file_perm - Directory permissions, e.g: 0755
+     * @return void
+     */
+    public function chmod_old( $path, $file_perm, $dir_perm ) {
 
+
+        try {
+            $dir = new DirectoryIterator( $path );
+            foreach ( $dir as $item ) {
+                if ( $item->isDir() && !$item->isDot() ) {
+                    chmod( $item->getPathname(), $dir_perm ); //set the directory permission
+                 //   $this->chmod( $item->getPathname(), $file_perm, $dir_perm ); //iterate into the directory
+                } else if ( !$item->isDir() && !$item->isDot() ) {
+                    chmod( $item->getPathname(), $file_perm );
+                }
+            }
+        } catch ( Exception $exc ) {
+            echo $exc->getTraceAsString();
+        }
+    }
+    /**
+     * Change File and Directory Permissions
+     *
+     * Change the permissions of all files and directories recursively
+     *
+     * @param $file_perm - File permissions, e.g.: 0600
+     * @param $file_perm - Directory permissions, e.g: 0755
+     * @return void
+     */
+    
+    public function chmodR($path, $filemode, $dirmode) {
+    if (is_dir($path) ) {
+        if (!chmod($path, $dirmode)) {
+            $dirmode_str=decoct($dirmode);
+            print "Failed applying filemode '$dirmode_str' on directory '$path'\n";
+            print "  `-> the directory '$path' will be skipped from recursive chmod\n";
+            return;
+        }
+        $dh = opendir($path);
+        while (($file = readdir($dh)) !== false) {
+            if($file != '.' && $file != '..') {  // skip self and parent pointing directories
+                $fullpath = $path.'/'.$file;
+                $this->chmodR($fullpath, $filemode,$dirmode);
+            }
+        }
+        closedir($dh);
+    } else {
+        if (is_link($path)) {
+            print "link '$path' is skipped\n";
+            return;
+        }
+        if (!chmod($path, $filemode)) {
+            $filemode_str=decoct($filemode);
+            print "Failed applying filemode '$filemode_str' on file '$path'\n";
+            return;
+        }
+    }
+} 
 
 }
 
