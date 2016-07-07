@@ -2,10 +2,10 @@
 
 
 ######################
-# Sets File Permissions
+# Unsets File Permissions
 # Usage:
 # cd /directory/that/contains/this file/
-# ./set-perms.sh /path/to/wordpress
+# ./unset-perms.sh /path/to/wordpress
 ######################
 
 
@@ -15,7 +15,6 @@ if [ $# -eq 0 ]
     echo "Must specify the WordPress directory path"
 exit;
 fi
-
 
 
 
@@ -33,12 +32,6 @@ DIR_PERMS_ACL=user::rwx,group::r-x,other::r-x
 FILE_PERMS=0644
 FILE_PERMS_ACL=user::rw-,group::r--,other::r--
 
-
-CONFIG_FILE_PERMS=0600
-CONFIG_FILE_PERMS_ACL=user::rw-,group::---,other::---
-
-
-
 echo "setting directory permissions..."
 
 
@@ -55,22 +48,10 @@ find "$1/" -type f -exec setfacl -s "${FILE_PERMS_ACL}" {} \; #setfacl for cygwi
 
 echo "setting configuration file permissions..."
 
-#wp-config
-chmod "${CONFIG_FILE_PERMS}"  "$1/wp-config.php"
-setfacl -s "${CONFIG_FILE_PERMS_ACL}" "$1/wp-config.php" #setfacl for cygwin
-
-
-chmod "${CONFIG_FILE_PERMS}"  "$1/config/wp-config.php"
-setfacl -s "${CONFIG_FILE_PERMS_ACL}" "$1/config/wp-config.php" #setfacl for cygwin
-
-
-#htaccess
-chmod "${FILE_PERMS}" "$1/.htaccess"
-setfacl -s "${FILE_PERMS_ACL}" "$1/.htaccess" #setfacl for cygwin
 
 #site-config.php
-find "${MOD_WP_DIR}/site-config.php" -type f -exec chmod "${CONFIG_FILE_PERMS}" {} \;
-find "${MOD_WP_DIR}/site-config.php" -type f -exec setfacl -s "${CONFIG_FILE_PERMS_ACL}" {} \; #setfacl for cygwin
+find "${MOD_WP_DIR}/site-config.php" -type f -exec chmod "${FILE_PERMS}" {} \;
+find "${MOD_WP_DIR}/site-config.php" -type f -exec setfacl -s "${FILE_PERMS_ACL}" {} \; #setfacl for cygwin
 
 
 echo "completed setting permissions, exiting"
