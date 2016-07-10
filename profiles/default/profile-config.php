@@ -3,7 +3,7 @@
 /* * *********************************
  * Customization
  * ********************************* */
-$config[ 'wp_options' ][ 'template' ] = ''; #default '' //theme to activate if exists.
+$config[ 'wp_options' ][ 'template' ] = 'twentyfifteen'; #default '' //theme to activate if exists.
 
 $config[ 'add_custom_content' ] = 0; //Add the custom content specified under the 'Custom Content' section
 

@@ -2031,8 +2031,7 @@ $this->_setConfig();//builds the $this->CONFIG property.
 
         $this->_wpIncludeWP();
 
-        $this->_UPDATED_OPTIONS[] = 'template'; //prevent theme from being updated using the update_options method which won't work if we've already deleted it. 
-//if the theme to be activated exists, delete the default themes
+       
         if ( $this->_wpThemeExists() && ($this->CONFIG[ 'remove_default_themes' ]) ) {
 //delete default themes except the desired theme to be activated
             $this->_wpRemoveDefaultThemes();
@@ -2472,14 +2471,22 @@ $this->_setConfig();//builds the $this->CONFIG property.
     private function _wpUpdateOptions() {
 
         $this->_getDbConnection();
+        
+     //    $this->_UPDATED_OPTIONS[] = 'template'; //prevent theme from being updated here since we set it separately under wpInstallThemes.
 
         foreach ( $this->CONFIG[ 'wp_options' ] as $option_name => $option_value ) {
+            if ( $option_name=='template') {
+                if ( $option_value==='') {
+                    continue; //don't change theme if its option value is empty
+                }else {
+                 switch_theme( $option_value, $option_value );
+                 continue;
+                }
+            }
             $this->_update_option( $option_name, $option_value );
         }
 
-        foreach ( $this->CONFIG[ 'wp_options' ] as $option_name => $option_value ) {
-            //   $this->_update_option( $option_name,$option_value );
-        }
+
     }
 
     /**
