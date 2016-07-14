@@ -27,7 +27,7 @@
         </div>
 
 
-        <form method="post" action="" id="install_form">
+        <form method="post" action="" class="" id="install_form">
 
 
             <p class="step"><button id="submit" class="btn btn-warning" style="width:100%"><?php echo _('Install WordPress');?></button></p>
@@ -54,10 +54,11 @@
           
           
          </form> <!-- end form -->
-                <script src="assets/js/jquery-1.8.3.min.js"></script>
+
         
         <script>var SITE_CONFIG = <?php echo json_encode( $wpress->getSafeConfig($wpress->SITE_CONFIG)); ?> ;</script>
          <script>var PROFILE_CONFIG = <?php echo json_encode( $wpress->getSafeConfig($wpress->PROFILE_CONFIG    )); ?> ;</script>
+<script>var CONFIG_PROPS = <?php echo json_encode( $wpress->CONFIG_PROPS    ); ?> ;</script>         
         <script>var PROFILES = <?php echo json_encode($wpress->getProfiles()); ?> ;</script>
         <script>var editable_props = <?php echo json_encode($wpress->EDITABLE_PROPS); ?> ;</script>      
         <script src="assets/js/mod-wp.js"></script>
