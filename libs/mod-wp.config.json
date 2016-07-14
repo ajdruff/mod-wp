@@ -1,0 +1,78 @@
+{
+    "config_props": {
+        "[wp_options][blogname]": {
+            "label": "Blog Name",
+            "description": "Your Blog's name",
+            "hide_web": false
+        },
+        "[wp_options][blogdescription]": {
+            "label": "Blog Description",
+            "description": "A tag line that will appear beneath your blog name"
+        },
+        "[wp_directory]": {
+            "label": "WordPress Directory",
+            "description": "The name of the directory to install WordPress. Leave empty to install in your web site's root."
+        },
+        "[HTTP_HOST]": {
+            "label": "Domain",
+            "description": "e.g. example.com. The domain of your site. This setting is only used when called by command line. The web form uses the predefined  $_SERVER['HTTP_HOST'] variable.",
+            "hide_web": true
+        },
+        "[profile]": {
+            "label": "Profile",
+            "description": "Select a profile, a collection of WordPress settings, plugins and themes that are grouped together in the profiles directory."
+        },
+        "[wpDownload]": {
+            "label": "wpDownload",
+            "description": "Download the latest version of WordPress and extract it to the WordPress installation directory."
+        },
+        "[wpConfig]": {
+            "label": "wpConfig",
+            "description": "Create wp-config.php files and update the wp-options table with site and profile settings."
+        },
+        "[wpInstallCore]": {
+            "label": "wpInstallCore",
+            "description": "Install WordPress. Includes creating WordPress tables and configuring logins"
+        },
+        "[wpInstallThemes]": {
+            "label": "wpInstallThemes",
+            "description": "Install themes by copying over any directory or zip file from the Profile's 'themes' directory."
+        },
+        "[wpInstallPlugins]": {
+            "label": "wpInstallPlugins",
+            "description": "Install plugins by copying over any directory or zip file from the Profile's 'plugins' directory, or as specified by $config[plugins] array."
+        },
+        "[wpResetPassword]": {
+            "label": "wpResetPassword",
+            "description": "Reset the WordPress admin password for an existing installation."
+        },
+        "[debug-show-exceptions]": {
+            "label": "Show Exceptions",
+            "description": "Shows Mod WP exception trace. Turn on only if you are debugging Mod WP (not WordPress)"
+        },
+        "[reinstall]": {
+            "label": "Reinstall",
+            "description": "Set to true to force overwrite of WordPress installation directory and database."
+        },
+        "[slide_rule]": {
+            "label": "Slide Rule",
+            "description": "Set to true create  `_live` , `_stage`, and `_dev` `wp-config.php` files when used with the <a href=\"https://github.com/ajdruff/slide-rule\">Slide Rule project</a>"
+        },
+        "[set_permissions]": {
+            "label": "Set Permissions",
+            "description": "Attempt to set file permissions, locking down configuration files and preventing unauthorized access."
+        },
+        "[max_execution_time]": {
+            "label": "Max Execution Time",
+            "description": "Maximum Execution Time allowed for a PHP script. Set this value to at least 300 if you are recieving installation failures due to timing issues.A value of 0 or less will cause the value in the php.ini to be used."
+        },
+        "[move_wpconfig]": {
+            "label": "Move wp-config.php",
+            "description": "This determines whether the `wp-config.php` file is moved to a separate 'config' directory that can be placed in the same directory as root (default) or, more securely, above the web root. "
+        },
+        "[wp_options][template]": {
+            "label": "Theme",
+            "description": "The WordPress theme to be selected upon installation. The theme must be available after wpInstallThemes  and remove_themes "
+        }
+    }
+}
