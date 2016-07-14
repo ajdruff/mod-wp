@@ -245,7 +245,7 @@ For example, if a profile-config.php has the following setting:
 
 You can override it by adding the following setting in site-config.php:
 
-    $config[ 'wp_options' ][ 'template' ] = 'twentyfifteen';
+    $config[ 'wp_options' ][ 'template' ] = 'twentyfourteen';
 
 The installer will set the theme as 'twentyfourteen'.
 
@@ -255,9 +255,10 @@ The installer will set the theme as 'twentyfourteen'.
 
 **How Mod WP Configures WordPress**
 
-Mod WP takes the settings found in your `site-config.php` and `profile-config.php` files that are identified as `$config[wp_config]` or `$config[wp_config]` and creates a customized `wp-config.php` file that includes those settings. 
+Mod WP takes the settings found in your `site-config.php` and `profile-config.php` files that are identified as `$config[wp_config]` and creates a customized `wp-config.php` file that includes those settings. 
 
 In addition, it updates the `wp_options` database table with any settings that are identified as $config[wp_options] or $config[wp_options].
+
 
 Other modifications it makes:
 
