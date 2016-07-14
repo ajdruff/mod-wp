@@ -74,5 +74,10 @@
             "label": "Theme",
             "description": "The WordPress theme to be selected upon installation. The theme must be available after wpInstallThemes  and remove_themes "
         }
+,
+        "[add_custom_content]": {
+            "label": "Add Custom Content",
+            "description": "Whether to add the custom content for posts and pages."
+        }        
     }
 }
