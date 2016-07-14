@@ -69,21 +69,78 @@ $(document).ready(function () {
          */
 
         function getProfileDropDownHTML(config_name) {
+         config_name=config_name.replace(input_array_name, '');
             var profile_select_html;
             profile_select_html = '';
-            selected='';
+            selected = '';
             for (var profile in PROFILES) {
-                if (PROFILES[profile] ===SITE_CONFIG['profile']) {
-                  selected='selected';  
-                }else {selected=''}
-                profile_select_html = profile_select_html + '<option '+selected+' value="' + PROFILES[profile] + '">' + PROFILES[profile] + '</option>';
+                if (PROFILES[profile] === SITE_CONFIG['profile']) {
+                    selected = 'selected';
+                } else {
+                    selected = ''
+                }
+                profile_select_html = profile_select_html + '<option ' + selected + ' value="' + PROFILES[profile] + '">' + PROFILES[profile] + '</option>';
             }
 
 
-            return "<tr><td>" + config_name.replace(input_array_name, '') + '</td><td><select id="profile" name="' + input_array_name + '[profile]"> ' + profile_select_html + '</select></td></tr>';
+
+            
+                            html = '<tr class="form-group">'
+                        + '<td>'
+                          + '<label >' +getConfigLabel(config_name)+ '</label>'
+                        + '<div ><em >' +getConfigDescription(config_name)+ '</em></div>'                    
+                        + '</td>'
+                        + '<td >'
+
+                        + '<select class="form-control" id="profile" name="' + input_array_name + '[profile]"> ' + profile_select_html + '</select>'
+
+
+                        + '</td>'
+                        + '</tr>';
+            
+            
+            return html;
+            
 
         }
+        /**
+         * Get Config Label
+         *
+         * Get the configuration label
+         */
+        
+        function getConfigLabel(config_name) {
+           if (typeof(CONFIG_PROPS[config_name])!=='undefined' && typeof(CONFIG_PROPS[config_name].label)!=='undefined') {
+                label =  CONFIG_PROPS[config_name].label;
+                
+            }
+            else {
+              label =  config_name;
 
+            }
+            return label;
+        }
+        /**
+         * Get Config Label
+         *
+         * Get the configuration label
+         */
+        
+        function getConfigDescription(config_name) {
+            var description;
+           if (typeof(CONFIG_PROPS[config_name])!=='undefined' && typeof(CONFIG_PROPS[config_name].description)!=='undefined') {            
+
+
+                description=CONFIG_PROPS[config_name].description + ' $config' +config_name ;
+                
+            }
+            else {
+              description =  '';
+
+            }
+            return description;
+        }
+        
         /**
          * Get HTML For Non-editable Elements
          *
@@ -93,19 +150,34 @@ $(document).ready(function () {
          */
 
         function getNonEditableHtml(config_name, config_value) {
-
-            var displayed_value = config_value;
+    config_name=config_name.replace(input_array_name, '');
+            var displayed_value = '<span class="control-group">'+config_value+'</span>';
             var html;
             //use displayed_value if applicable
             if ((typeof (config_value) == "boolean")) {
 
 
-                displayed_value = (config_value == true) ? '<span class="glyphicon glyphicon-ok" style="color:green"></span>' : '<span class="glyphicon glyphicon-remove" style="color:red"></span>';
+                displayed_value = (config_value == true) ? '<span class="control-group   glyphicon glyphicon-ok" style="color:green"></span>' : '<span class="glyphicon glyphicon-remove" style="color:red"></span>';
 
             }
 
 
-            html = '<tr><td>' + config_name.replace(input_array_name, '') + '</td><td>' + displayed_value + '</td></tr>';
+ 
+            
+                            html = '<tr class="form-group">'
+                        + '<td>'
+                               + '<label >' +getConfigLabel(config_name)+ '</label>'
+                        + '<div ><em >' +getConfigDescription(config_name)+ '</em></div>'     
+                        + '</td>'
+                        + '<td >'
+
+                        + displayed_value
+
+
+                        + '</td>'
+                        + '</tr>';   
+            
+            
             return html;
         }
 
@@ -120,17 +192,55 @@ $(document).ready(function () {
 
         function getEditableHtml(config_name, config_value) {
 
+           config_name=config_name.replace(input_array_name, '');
+           
+
+           
+           
+
             if ((typeof (config_value) == "boolean")) {
                 checked = (config_value == true) ? 'checked' : '';
 
 
 
 
-                html = '<tr><td>' + config_name.replace(input_array_name, '') + '</td><td><input type="checkbox" ' + checked + ' name="no_input_' + config_name + '" value="' + config_value + '"><input type="hidden"  name="' + config_name + '" value="' + config_value + '"></td></tr>';
+                
+                
+                html = '<tr class="form-group">'
+                        + '<td>'
+                           + '<label >' +getConfigLabel(config_name)+ '</label>'
+                        + '<div ><em >' +getConfigDescription(config_name)+ '</em></div>'        
+                        + '</td>'
+                        + '<td >'
+
+                        + '<input type="checkbox" ' + checked + ' name="no_input_' + config_name + '" value="' + config_value + '"><input type="hidden"  value="' + config_value + '">'
+
+
+                        + '</td>'
+                        + '</tr>';                
+                
+                
 
             } else {
 
-                html = '<tr><td>' + config_name.replace(input_array_name, '') + '</td><td><input type="text" name="' + config_name + '" value="' + config_value + '"></td></tr>';
+
+
+
+
+
+
+                html = '<tr class="form-group">'
+                        + '<td>'
+                        + '<label >' +getConfigLabel(config_name)+ '</label>'
+                        + '<div ><em >' +getConfigDescription(config_name)+ '</em></div>'                   
+                        + '</td>'
+                        + '<td >'
+
+                        +'<input class="form-control  "  type="text" name="' + config_name + '" value="' + config_value + '">'
+
+
+                        + '</td>'
+                        + '</tr>';
             }
 
             return html;
@@ -148,9 +258,9 @@ $(document).ready(function () {
 
         for (var config_name in config_obj) {
             config_value = config_obj[config_name];
-       
 
-           
+
+
             var is_editable = null;
 
             if (config_value instanceof Object) {
@@ -174,8 +284,19 @@ $(document).ready(function () {
 
                     } else if (!is_editable) {
 
+                            html = '<tr class="form-group">'
+                        + '<td>'
+                               + '<label >' +getConfigLabel(config_name)+ '</label>'
+                        + '<div ><em >' +getConfigDescription(config_name)+ '</em></div>'     
+                        + '</td>'
+                        + '<td >'
 
-                        table = table.concat(getNonEditableHtml(input_array_name + '[' + config_category + '][' + config_name + ']', config_value));
+                        + getNonEditableHtml(input_array_name + '[' + config_category + '][' + config_name + ']', config_value)
+
+
+                        + '</td>'
+                        + '</tr>';   
+                        table = table.concat(html);
 
                     }
                 }
@@ -259,10 +380,24 @@ $(document).ready(function () {
         var progress_bar_width = 0; //keep track of width updates.
 
         $('#submit').click(function () {
+
+            $("#install_form").submit();
+
+        });
+
+        /**
+         * Short Description
+         *
+         * Long
+         * @param string $content The shortcode content
+         * @return string The parsed output of the form body tag
+         */
+
+        function resetForm() {
             retry = 0;
 
-            $(this).attr("disabled", true);
-            $(this).prop("disabled", true);
+            $('#submit').attr("disabled", true);
+            $('#submit').prop("disabled", true);
             $('#submit').html('Installing WordPress...');
             $('#install_messages').html('');
             $('#install_messages').hide();
@@ -274,10 +409,46 @@ $(document).ready(function () {
             progress_bar_width = progress_bar_width + 10;
             $('.progress-bar').animate({width: progress_bar_width + "%", "aria-valuenow": progress_bar_width});
 
-            install('start');
+        }
 
-            return false;
-        });
+
+
+
+        var rules = {
+            rules: {
+                'SITE_CONFIG[wp_options][blogname]': {
+                    minlength: 2,
+                    required: true
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                message: {
+                    minlength: 2,
+                    required: true
+                }
+            },
+            highlight: function (element) {
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+
+            },
+            success: function (element) {
+
+                element.text('OK!').addClass('valid')
+                        .closest('.form-group').removeClass('has-error').addClass('has-success');
+            },
+            onfocusout: false,
+            onkeyup: false,
+            submitHandler: function () {
+                resetForm();
+                install('start');
+            }
+
+        };
+
+
+        $("#install_form").validate(rules);
 
         /**
          * Install
@@ -423,6 +594,10 @@ $(document).ready(function () {
     modwp_install.setUpConfigTable();
     modwp_install.setupEvents();
     modwp_install.install();
+
+
+
+
 
 
 });

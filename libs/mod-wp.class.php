@@ -54,6 +54,7 @@ class modwp_install {
     public $PROFILE_CONFIG_FILE = null;
     
     public $CONFIG = null;
+    public $CONFIG_PROPS= null;
     public $DEFAULTS_CONFIG = null;        
     public $SITE_CONFIG = null; //contains all the variables in site-config.php
     public $PROFILE_CONFIG = null; //contains all the variables in profile-config.php 
@@ -2122,6 +2123,31 @@ $this->_setConfig();//builds the $this->CONFIG property.
         $this->_wp_theme_exists = false;
         return ($this->_wp_theme_exists);
     }
+    
+    
+    
+    
+    /**
+     * set Configuration Properties
+     *
+     * Loads the $config_prop values, which provide the lable and description for each of the configuration options.
+     *
+     * @param none
+     * @return void
+     */
+    public function _setConfigProps() {
+                    if ( !is_null( $this->CONFIG_PROPS ) ) {
+            return;
+        }
+
+
+        $json=file_get_contents($this->INSTALLER_DIRECTORY . '/libs/mod-wp.config.json');
+        $this->CONFIG_PROPS=json_decode($json,true);
+        $this->CONFIG_PROPS=$this->CONFIG_PROPS['config_props'];
+       
+ 
+
+    }
         /**
          * Set Config Property
          *
@@ -2134,6 +2160,7 @@ $this->_setConfig();//builds the $this->CONFIG property.
                     
         //set the config properties
         $this->_setDefaultsConfig(); //$this->DEFAULTS_CONFIG
+        $this->_setConfigProps(); //$this->DEFAULTS_CONFIG        
         $this->_setSiteConfig(); //$this->SITE_CONFIG    
         $this->_setProfileConfig(); //$this->PROFILE_CONFIG
                
@@ -2409,6 +2436,7 @@ $this->_setConfig();//builds the $this->CONFIG property.
 
         $json[ 'SITE_CONFIG' ] = ($safe) ? $this->getSafeConfig( $this->SITE_CONFIG ) : $this->SITE_CONFIG;
         $json[ 'PROFILE_CONFIG' ] = ($safe) ? $this->getSafeConfig( $this->PROFILE_CONFIG ) : $this->PROFILE_CONFIG;
+        $json[ 'CONFIG_PROPS' ] = $this->CONFIG_PROPS;
         return json_encode( $json );
     }
 
