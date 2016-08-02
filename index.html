@@ -31,18 +31,21 @@
 <a id="" class="anchor" href="#" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><img src="https://cdn.rawgit.com/ajdruff/mod-wp/master/assets/images/mod-wp-logo-150x150.png" alt="Mod WP">
 </h1>
 
+<pre><code>        php index.php
+</code></pre>
+
 <p><strong>Mod WP</strong> is a WordPress installer that enables you to modify the installation of 
 WordPress to install custom content, themes and plugins. </p>
 
 <h1>
 <a id="why-use-mod-wp-to-install-wordpress" class="anchor" href="#why-use-mod-wp-to-install-wordpress" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Why use Mod WP to install WordPress?</h1>
 
+<p>With Mod WP you can:</p>
+
 <ul>
-<li>You always get the latest version of WordPress and plugins</li>
-<li>You can add custom pages and posts</li>
-<li>You can add custom plugins and themes</li>
-<li>You can remove default WordPress content like the 'Hello World' post and comments.</li>
-<li>You can remove the default plugins and themes like TwentyEleven and Hello Dolly</li>
+<li>Be sure you always get latest version of WordPress and plugins with each installation</li>
+<li>Add custom pages, posts, plugins, and themes </li>
+<li>Remove default WordPress content, plugins and themes. No more 'Hello Dolly' plugin, or 'Hello World' post to delete.</li>
 </ul>
 
 <p><strong>What makes Mod WP better than other installation scripts?</strong></p>
@@ -54,15 +57,14 @@ WordPress to install custom content, themes and plugins. </p>
 <strong>Choice of either a Web Form or Command Line Interface</strong> 
 Install WordPress using Mod WP's web form for a quick point and click installation, call it from the command line or even integrate it into your own deployment scripts.</li>
 <li>
-<strong>No special installation requirements</strong>. Mod WP doesn't use bash or anything other than whats required for a typical WordPress installation.</li>
+<strong>No special installation requirements</strong>. Mod WP uses pure PHP to install WordPress, so if your server supports WordPress, it will support Mod WP.</li>
 <li>
-<strong>More secure</strong>
+<strong>Password Handling</strong>
 
 <ul>
-<li>  You are never allowed to choose your own WP Admin password on installation, the script always creates one for you. </li>
-<li>  wp-config.php is moved to outside the web root.</li>
-<li>  Secure File permissions are set automatically.</li>
-<li>  Your database username and password aren't exposed over the web form.</li>
+<li>  Mod WP always generates your WordPress Admin password, ensuring a unique and complex password for each install.</li>
+<li>  Mod WP provides an option to move your wp-config.php file outside the web root, potentially making it harder for an attacker to grab your database password.</li>
+<li>  Mod WP doesn't allow you to edit your database username and password over the installation web form, thereby preventing accidental exposure over the web if accessing the installation form over a non-https channel.</li>
 </ul>
 </li>
 </ul>
@@ -85,6 +87,10 @@ Install WordPress using Mod WP's web form for a quick point and click installati
 <ol>
 <li>
 <p><strong>Create the WordPress database</strong></p>
+
+<blockquote>
+<p>*<em>Note: if the database user that you are using to install WordPress includes database creation permissions, you may skip this step *</em></p>
+</blockquote>
 
 <p><em>by command line:</em></p>
 
@@ -137,21 +143,22 @@ mysql&gt; CREATE DATABASE &lt;database-name&gt;;
 <li>
 <p><strong>Configure Mod WP</strong> </p>
 
-<p>Make a copy of <code>mod-wp/site-config-sample.php</code> and rename it to <code>site-config.php</code>. </p>
+<p>Make a copy of <code>mod-wp/config-site-sample.json</code> and rename it to <code>config-site.json</code>. </p>
 
 <pre><code>cd /path/to/mod-wp/
-cp site-config-sample.php site-config.php
+cp config-site-sample.json config-site.json
 </code></pre>
 
-<p>Edit <code>site-config.php</code> with the desired values for your site. </p>
+<p>Edit <code>config-site.json</code> with the desired values for your site. </p>
 
 <p>At a minimum, you'll need to change the following: </p>
 
-<pre><code>+ $site[ 'wp_users' ][ 'user_login' ]  (the WordPress administor's username)
-+ $site[ 'wp_users' ][ 'user_email' ] (the WordPress administor's email)
-+ $site[ 'wp_config' ][ 'DB_NAME' ](the WordPress database name)
-+ $site[ 'wp_config' ][ 'DB_USER' ] (A username that WordPress can use to access the database)
-+ $site[ 'wp_config' ][ 'DB_PASSWORD' ] (The WordPress database user's password)
+<pre><code>"wp_config": {
+
+    "DB_NAME": "YOUR_DATABASE_NAME", 
+    "DB_PASSWORD": "YOUR_DATABASE_PASSWORD",
+    "DB_USER": "YOUR_DATABASE_USERNAME",
+},
 </code></pre>
 </li>
 <li>
@@ -162,14 +169,14 @@ cp site-config-sample.php site-config.php
 <ol>
 <li><p>Browse to the <code>mod-wp</code> directory e.g: <code>http://example.com/mod-wp/</code> </p></li>
 <li><p>Select the profile you'd like to use by selecting from the dropdown.</p></li>
-<li><p>Review and edit any values as necessary. Some values are easily editable via the webform. Other less used settings require that you edit the <code>site-config.php</code> or <code>profile-config.php</code> file directly using a text editor.</p></li>
+<li><p>Review and edit any values as necessary. Some values are easily editable via the webform. Other less used settings require that you edit the <code>config-site.json</code> or <code>config-profile.json</code> file directly using a text editor.</p></li>
 <li><p>Click the <code>Install</code> button</p></li>
 </ol>
 
 <p>** <em>Run the Installer Using the Command Line</em> **</p>
 
 <pre><code>    cd /path/to/mod-wp/
-    php index.php
+    chmod +x ./index.php
 </code></pre>
 
 <blockquote>
@@ -178,39 +185,105 @@ cp site-config-sample.php site-config.php
 </li>
 </ol>
 
+<h2>
+<a id="security" class="anchor" href="#security" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Security</h2>
+
+<blockquote>
+<p><strong>Always delete the <code>mod-wp</code> directory</strong> or at least the <code>config-site.json</code> when you are done with installation. The config-site.json file contains your database password and username and any attacker will be able to compromise your site resulting in data compromise and/or loss. 
+Maintain proper file permissions for the wp-config.php files that are generated. </p>
+</blockquote>
+
+<p><strong>File and Directory Permissions</strong>
+Mod WP attempts to set recommended file permissions for all files, but you'll need to check that permissions are set properly for your risk environment. Setting permissions via PHP script sometimes fails silently due to the specifics of a particular site's configuration. For example, PHP <code>chmod</code> frequently fails in cygwin environments since the newer versions of cygwin rely on <code>setfacl</code> vs <code>chmod</code>. </p>
+
+<p><strong>Setting Permissions Using the bash script set-perms.sh</strong></p>
+
+<p>Sometimes, the PHP script may fail to set the correct permissions. Mod WP comes with a bash script that you can use to execute recommended file permissions:</p>
+
+<pre><code>cd /path/to//mod-wp/libs/
+chmod +x ./set-perms.sh
+./set-perms.sh /absolute/path/to/wordpress
+</code></pre>
+
+<blockquote>
+<p><strong>Permissions provided are not necessarily appropriate for your risk environment.</strong></p>
+</blockquote>
+
+<p><strong>WordPress Hardening</strong></p>
+
+<p>Since there are many different ways to harden WordPress, some with significant tradeoffs to performance and convienance, Mod WP doesn't attempt to harden WordPress. </p>
+
 <h1>
 <a id="passwords" class="anchor" href="#passwords" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Passwords</h1>
 
-<p>Mod WP doesn't let you set your own admin password, but generates one for you. The password is generated by a cryptographically secure algorythmn which ensures complexity and uniqueness with each install. </p>
+<p>Mod WP doesn't let you set your own admin password, but generates one for you. The password is generated by a cryptographically secure algorithm which ensures complexity and uniqueness with each install. </p>
 
-<p>If you run the installer and forget to note the password, you'll be locked out of your newly installed site. You can fix this by re-running the installer to reset your password but keep the rest of the intallation intact. See the 'Password Reset' section under 'Advanced Usage'.</p>
+<p>If you run the installer and forget to note the password, you'll be locked out of your newly installed site. You can fix this by re-running the installer to reset your password but keep the rest of the installation intact. See the 'Password Reset' section under 'Advanced Usage'.</p>
 
 <h1>
-<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuration</h1>
+<a id="mod-wp-configuration" class="anchor" href="#mod-wp-configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Mod WP Configuration</h1>
 
-<p>Configuration settings are divided into 2 categories, <em>Site</em> and <em>Profile</em> which are contained in the <code>site-config.php</code> and <code>profile-config.php</code> files. </p>
+<p>Configuration settings are divided into 2 categories, <em>Site</em> and <em>Profile</em> which are contained in the <code>config-site.json</code> and <code>config-profile.json</code> files. </p>
+
+<p><strong>JSON Configuration File Format</strong></p>
+
+<p>Configuration files use the <a href="http://www.json.org/">JSON</a>  format. JSON is an easy to read, easy to parse data-interchange format. </p>
+
+<p>For help with troubleshooting common syntax errors in configuration files, see the troubleshooting section. </p>
+
+<blockquote>
+<p><strong>Note</strong> that some examples showing configuration settings show an elipsis in place of other settings. This is done for readability. Including the elipsis in practice will cause the JSON format to break and Mod WP to fail to start.</p>
+</blockquote>
 
 <p><strong>Site Configuration</strong></p>
 
-<p>The <code>site-config.php</code> file contains site specific settings, such as the name of the site and its description. The settings contained in this file may change for each new site for which you run the installer.</p>
+<p>The <code>config-site.json</code> file contains site specific settings, such as the name of the site and its description. The settings contained in this file may change for each new site for which you run the installer.</p>
+
+<p>For typical Site settings, see the <code>config-site-sample.json</code> file. </p>
+
+<p>For a list of all settings, see the </p>
+
+<h1>
+<a id="viewing-the-full-list-of-available-configuration-settings" class="anchor" href="#viewing-the-full-list-of-available-configuration-settings" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Viewing the full list of available configuration settings</h1>
+
+<p>The full list of configuration settings and their descriptions can be found by visiting </p>
+
+<pre><code>http://example.com/mod-wp/?action=help-config
+</code></pre>
+
+<p>where <code>example.com</code> is the domain to your local site that contains the mod-wp directory. </p>
+
+<p>or via command line: </p>
+
+<pre><code>php index.php --help-config
+</code></pre>
+
+<p><em>Site Configuration Settings</em></p>
+
+<p>For sample Site settings, see the <code>config-site-sample.json</code> file. </p>
 
 <p><strong>Profile Configuration</strong></p>
 
+<p>For sample configuration settings, see the <code>config-profile-sample.json</code> file or the default <code>config-profile.json</code> file.</p>
+
 <p>Installation profiles are contained in the <code>profiles</code> directory and contain settings, plugins, and themes that are common across similar sites. For example, if you have a client that likes a common set of plugins for all their sites, you can create a profile that can be used again and again for that client, ensuring consistency across installations.</p>
 
-<p>An installation profile is configured by editing the $site['profile'] setting contained in the <code>site-config.php</code> file or as selected from the <code>[profile]</code> dropdown in the web interface. </p>
+<p>An installation profile is configured by editing the <code>general:profile</code> setting contained in the <code>config-site.json</code> file or as selected from the <code>Profile</code> dropdown in the web form. </p>
 
-<p>To create a new profile, copy the <code>profiles/default</code> directory and rename it to the name of your profile. Change the <code>$site['profile']</code> setting to the name of the directory. Edit the <code>profiles/profile-name/profile-config</code> file as needed to fit your installation requirements, and add any custom themes or plugins to the either the <code>themes</code> or <code>plugins</code> subdirectory.</p>
+<p>To create a new profile, copy the <code>profiles/default</code> directory and rename it to the name of your profile. Change the <code>general:profile</code> setting to the name of the directory. Edit the <code>profiles/profile-name/profile-config.json</code> file as needed to fit your installation requirements, and add any custom themes or plugins to the either the <code>themes</code> or <code>plugins</code> subdirectory.</p>
 
 <blockquote>
 <ul>
-<li>Refresh the Web Interface page after each edit of  <code>site-config.php</code> or <code>profile-config.php</code> . </li>
+<li>Refresh the Web Interface page after each edit of  <code>config-site.json</code> or <code>config-profile.json</code> . </li>
 <li>For boolean values, use true or false, without quotes. ( Mod WP treats the following values as true or false:  '1','0','on','off','true','false','yes' or 'no'. 1 and 0 without quotes are treated as numbers not as true or false).</li>
 </ul>
 </blockquote>
 
-<h1>
-<a id="leverage-profiles-to-save-time" class="anchor" href="#leverage-profiles-to-save-time" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Leverage Profiles to save time</h1>
+<p><em>Profile Configuration Settings</em></p>
+
+<p>For available Profile settings, see the <code>profiles/default/config-profile.json</code> file. </p>
+
+<p><strong>Leverage Profiles to save time</strong></p>
 
 <p>Here are some ways you can use profiles to save time:</p>
 
@@ -220,6 +293,119 @@ cp site-config-sample.php site-config.php
 <li>Use GitHub to share profiles with your team. Use your source control repository such as GitHub to share installation profiles that work best for your team.</li>
 </ul>
 
+<p><strong>Default Configuration Settings</strong></p>
+
+<p><code>mod-wp.config.json</code> contains the properties of all settings, and the defaults when generating the sample files. It also supplies the default setting before your <code>config-profile.json</code> and <code>config-site.json</code> files are read, thereby acting as the 'factory defaults'.</p>
+
+<p>It should never be edited and will be overridden by any settings that you set in <code>config-site.json</code> or the <code>config-profile.json</code> files . If you forget (or delete) a setting in either of those two files, the settings from  <code>mod-wp.config.json</code> files will be used.</p>
+
+<p><strong>Configuration Order of Precedence</strong></p>
+
+<p>Mod WP processes configuration settings in the following order:</p>
+
+<ul>
+<li>defaults from <code>mod-wp.config.json</code>
+</li>
+<li>settings from config-profile.json</li>
+<li>settings from config-site.json </li>
+</ul>
+
+<p>What this means in practice is that you can overrie a Profile configuration by simply adding a similar setting in your <code>config-site.json</code> file with a different value. This means you can avoid having to edit the original <code>config-profile.json</code> file.</p>
+
+<p>For example, if a <code>config-profile.json</code> has the following setting:</p>
+
+<pre><code>    "wp_options": {
+    ...            
+    "template": "twentyfifteen",
+    ...
+    },
+</code></pre>
+
+<p>You can override it by adding the following setting in config-site.json:</p>
+
+<pre><code>    "wp_options": {
+    ...
+    "template": "twentyfourteen",
+    ...
+    },
+</code></pre>
+
+<p>The installer will set the theme as 'twentyfourteen'.</p>
+
+<h1>
+<a id="generating-sample-configuration-files" class="anchor" href="#generating-sample-configuration-files" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Generating Sample Configuration Files</h1>
+
+<p>Its always recommended that you start configuration using a copy of  <code>config-site-sample.json</code>  and <code>config-profile-sample.json</code> or  <code>default/config-profile.json</code>.</p>
+
+<p>If you delete the configuration sample files and want to regenerate them from scratch, you can do so by by visiting </p>
+
+<pre><code>http://example.com/mod-wp/?action=samples
+</code></pre>
+
+<p>where <code>example.com</code> is the domain to your local site that contains the mod-wp directory. </p>
+
+<p>or via command line: </p>
+
+<pre><code>php index.php --samples
+</code></pre>
+
+<p>This will create new sample files and place them in the root of the <code>mod-wp</code> directory.</p>
+
+<p>The sample files are generated using the following guidelines which you should also use whenever you create or modify the files:</p>
+
+<ul>
+<li>
+<code>config-profile.json</code> should include debug settings and recommended that they are turned off. </li>
+<li>
+<code>config-profile.json</code>  should never include site specific settings or credentials ( site name, usernames, password). </li>
+<li>
+<code>config-site.json</code> should include debug settings </li>
+</ul>
+
+<p>These recommendations are encoded in the configuration generator according to the boolean configuration properties '<code>site</code>' and '<code>profile</code>' found in <code>mod-wp.config.json</code>.</p>
+
+<p>These are just recommendations. In practice,  any setting can be added to any file.If identical settings are found in both files, <code>config-site.json</code> will override <code>config-profile.json</code>.</p>
+
+<p>The overall principal is that profiles (<code>config-profile.json</code>) are intended to be common settings that can be re-used over and over without modification for similar site installations. Site settings (<code>config-site.json</code>) are intended to override profile settings for a site specific installation.</p>
+
+<h1>
+<a id="why-cant-you-edit-profile-settings-using-the-web-form" class="anchor" href="#why-cant-you-edit-profile-settings-using-the-web-form" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Why can't you edit Profile settings using the web form?</h1>
+
+<p>Profile settings are intentionally not editable via the web form. If you feel you need to modify a profile setting, and the new value is needed for your current installation, edit the <code>config-site.json</code> file and add or edit an equivilent setting. The site setting you add/edit will override the setting in the profile.</p>
+
+<p>If you want to make a permanent change to the profile that will effect all future installations that use that profile,  edit its <code>config-profile.json</code> file. </p>
+
+<p>You may also consider creating an entirely new profile if your modifications will be needed for future installations.</p>
+
+<h1>
+<a id="wordpress-configuration" class="anchor" href="#wordpress-configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>WordPress Configuration</h1>
+
+<p><strong>How Mod WP Configures WordPress</strong></p>
+
+<p>Mod WP takes the settings found in your <code>config-site.json</code> and <code>config-profile.json</code> files that are under the 'wp-config' section and creates a customized <code>wp-config.php</code> file that includes those settings. </p>
+
+<p>In addition, it updates the <code>wp_options</code> database table with any settings that are contained in the 'wp-options' section of the configuration file.</p>
+
+<p>Other modifications it makes:</p>
+
+<ul>
+<li>moves the wp-config.php to its own separate directory (see the next section for more information)</li>
+<li>updates wp-config.php with custom salts</li>
+<li>optionally creates  <code>_live</code> , <code>_stage</code>, and <code>_dev</code> <code>wp-config.php</code> files when used with the <a href="https://github.com/ajdruff/slide-rule">Slide Rule project</a> ( set <code>general:slide_rule</code> to true);</li>
+</ul>
+
+<p>If you'd like to re-configure WordPress without overwriting your site's installation, you can do so by changing all options under the <code>install_switches</code> section to false except <code>wpConfig</code>.</p>
+
+<p><strong>Location of the wp-config.php file</strong></p>
+
+<p>The <code>wp-config.php</code> file contains your database username and password, and many other settings used by WordPress to configure your site. A typical installation of WordPress places this file alongside the other files contained in the WordPress installation directory, above your web server's root directory. </p>
+
+<p>With the right file permissions, this location can be fine in terms of security, but some prefer <code>wp-config.php</code> to be located outside the web root to further protect against unauthorized viewing or editing.</p>
+
+<p>By default, Mod WP creates a directory <code>config</code> in the WordPress directory and places <code>wp-config.php</code> file within it, and then modifies the <code>wp-config.php</code> contained in the WordPress installation directory to  include  <code>config/wp-config.php</code>. The user may then keep the <code>config</code> directory in the web root, or move it above the web root. Either way, Mod WP makes sure that WordPress can find it.</p>
+
+<p>To disable this default behavior of moving the wp-config.php file, set <code>general:move_wpconfig</code> to true. This will keep <code>wp-config.php</code> alongside the other files as intended with a typical installation.</p>
+
 <h1>
 <a id="advanced-usage" class="anchor" href="#advanced-usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Advanced Usage</h1>
 
@@ -228,7 +414,7 @@ cp site-config-sample.php site-config.php
 
 <p>To reset the admin password for the admin user configured during the initiall installation:</p>
 
-<p>Edit the site-config.php file and under the <em>Advanced-Selective Install</em> section, set the following values to false:</p>
+<p>Edit the config-site.json file and under the <em>Advanced-Selective Install</em> section, set the following values to false:</p>
 
 <ul>
 <li>wpDownload</li>
@@ -249,7 +435,7 @@ cp site-config-sample.php site-config.php
 <p>If you get database connection errors, make sure your database username and password is set correctly under the <code>Database</code> section and re-run the install.</p>
 
 <h2>
-<a id="selective-install" class="anchor" href="#selective-install" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Selective Install</h2>
+<a id="installation-switches" class="anchor" href="#installation-switches" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation Switches</h2>
 
 <p>Normally, Mod WP does the following when it installs WordPress:</p>
 
@@ -261,20 +447,18 @@ cp site-config-sample.php site-config.php
 <li>Installs Themes (wpInstallThemes)</li>
 </ul>
 
-<p>You can instead choose to selectively execute any one of these steps  by editing their true or false values in the <code>site-config.php</code> file under the <code>Selective Install</code> setting, or check or uncheck the option from the installation web form.</p>
+<p>You can instead choose to selectively execute any one of these steps  by editing their true or false values in the <code>config-site.json</code> file under the <code>install_switches</code> section, or check or uncheck the option from the advanced tab in the installation web form.</p>
 
 <p>For example, if you just want to download WordPress and unzip it, but not perform configuration or installation of core,themes or plugin (and therefore not actualy populate the install's database), then the settings would be:</p>
 
-<pre><code>/* * *********************************
- - Advanced-Selective Install
- - ********************************* */
-
-$site[ 'wpDownload' ] = true; #default true
-$site[ 'wpConfig' ] = false; #default true
-$site[ 'wpInstallCore' ] = false; #default true
-$site[ 'wpInstallThemes' ] = false; #default true
-$site[ 'wpInstallPlugins' ] = false; #default true
-$site[ 'wpResetPassword' ] = false; #default false
+<pre><code>"install_switches": {
+    "wpDownload": true,
+    "wpConfig": false,
+    "wpInstallCore": false,
+    "wpInstallThemes": false,
+    "wpInstallPlugins": false,
+    "wpResetPassword": false
+}
 </code></pre>
 
 <blockquote>
@@ -286,30 +470,40 @@ $site[ 'wpResetPassword' ] = false; #default false
 
 <p>Re-installing WordPress on a site that has been operating for some time where the site has accumulated new posts, users and uploads that were not included in the initial installation will delete those new users and posts. </p>
 
-<p>To safeguard against that potential loss of data, re-running setup under its default settings will result in errors warning that it will overwrite your already downloaded files or your already installed database and the instaler will refuse to continue.</p>
+<p>To safeguard against that potential loss of data, re-running setup under its default settings will result in errors warning that it will overwrite your already downloaded files or your already installed database and the installer will refuse to continue.</p>
 
-<p>If however, you simply want to re-install WordPress and don't care if your data or database is overwritten (maybe because you changed your mind and want to rerun setup using a different profile, for example) , then find the <code>$site[ 'reinstall' ]</code> option and set it true. Re-run setup and setup will overwrite your old files and database without throwing an error or prompting.</p>
+<p>If however, you simply want to re-install WordPress and don't care if your data or database is overwritten (maybe because you changed your mind and want to rerun setup using a different profile, for example) , then find the <code>general:reinstall</code> option and set it true. </p>
 
-<blockquote>
-<p><strong>Caution</strong> : Always delete the <code>mod-wp</code> directory or at least change this </p>
-</blockquote>
+<pre><code>"general": {
+    ...
+    "reinstall": true,
+    ...
+}
+</code></pre>
+
+<p>Re-run setup and setup will overwrite your old files and database without throwing an error or prompting.</p>
 
 <h2>
 <a id="custom-wp_option-settings" class="anchor" href="#custom-wp_option-settings" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Custom <code>wp_option</code> settings</h2>
 
-<p>The default site-config.php and site-profile.php files contain a few settings that are saved to the <code>wp_options</code> WordPress database table.</p>
+<p>The default <code>config-site.json</code> and <code>config-profile.json</code> files contain a few settings that are saved to the <code>wp_options</code> WordPress database table.</p>
 
-<p>You can add any valid option during install by simply adding an equivilent setting within the site-profile.php file.</p>
+<p>You can add any valid option during install by simply adding an equivilent setting within the <code>config-site.json</code> file.</p>
 
-<p>For example, if you wanted to set the number of posts per page for your installation to 5 vs the default 10, you can add the following line to <code>site-config.php</code></p>
+<p>For example, if you wanted to set the number of posts per page for your installation to 5 vs the default 10, you can add the following line to <code>config-site.json</code></p>
 
-<pre><code>$site[ 'wp_options' ][ 'posts_per_page' ] = 5;
+<pre><code>    "wp_options": {
+    "blogdescription": "Just Another WordPress Site",
+    "blogname": "My WordPress Site",
+    "permalink_structure": "%postname%",
+    "posts_per_page": "5"
+    }
 </code></pre>
 
 <h2>
 <a id="temporary-settings-override" class="anchor" href="#temporary-settings-override" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Temporary Settings Override</h2>
 
-<p>When installing via the web form, most settings are not available to edit except by editing the site-config.php or profile-config.php file using a text editor.</p>
+<p>When installing via the web form, most settings are not available to edit except by editing the <code>config-site.json</code> or <code>config-profile.json</code> file using a text editor.</p>
 
 <p>If you want to temporarily change any settings without having to edit the appropriate configuration file, you can add a Query String paramater to override the value.</p>
 
@@ -318,37 +512,223 @@ $site[ 'wpResetPassword' ] = false; #default false
 <pre><code>http://example.com/mod-wp/
 </code></pre>
 
-<p>You can override a site configuration setting such as $site['wpConfig'] which is normally set to false, to true by visiting the following url and clicking 'Install': </p>
+<p>You can override a site configuration setting such as <code>general:add_custom_content</code> (for example if the profile has set it to false) to true by visiting the following url and clicking 'Install': </p>
 
-<pre><code> http://example.com/mod-wp/?SITE_CONFIG[wpConfig]=false
+<pre><code> http://example.com/mod-wp/?SITE_CONFIG[general][add_custom_content]=true
 </code></pre>
 
-<p>You can override  both  a site configuration and a profile configuration value using a url similar to: </p>
+<p>You can also override  both  a site configuration and a profile configuration value using a url similar to: </p>
 
-<pre><code>http://example.com/mod-wp/?SITE_CONFIG[wpConfig]=false&amp;PROFILE_CONFIG[wp_options][permalink_structure]=test
+<pre><code>http://example.com/mod-wp/?SITE_CONFIG[general][add_custom_content]=true&amp;PROFILE_CONFIG[general][add_custom_plugins]=true
 </code></pre>
+
+<blockquote>
+<p><strong>Note</strong> In practice, you would likley never need to override profile values (the second example) since site settings always override profile values.</p>
+</blockquote>
 
 <h1>
 <a id="troubleshooting" class="anchor" href="#troubleshooting" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Troubleshooting</h1>
 
-<p><strong>Exception Info</strong></p>
+<h2>
+<a id="exception-info" class="anchor" href="#exception-info" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Exception Info</h2>
 
-<p>You can get more info on exceptions by setting $site[ 'debug-show-exceptions' ] = true;</p>
-
-<p><strong>Persistent retrys</strong></p>
-
-<p>A 'retry' mechanism was added to try to overcome what is probably a timing limitation that doesn't always allow wpUnzip or wpConfig to complete. 3 retrys are attempted and if they all fail, the installation fails. Usually if you just do a hard refresh of the page and restart the install it will work.</p>
+<p>You can get more info on Mod WP errors by setting <code>general:show_exceptions</code> to true.</p>
 
 <h2>
-<a id="errors" class="anchor" href="#errors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Errors</h2>
+<a id="persistent-retrys" class="anchor" href="#persistent-retrys" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Persistent retrys</h2>
 
-<p><strong>'Cannot proceed without a site-config.php file! Create one from <code>site-config-sample.php</code></strong></p>
+<p>A 'retry' mechanism was added to try to overcome what is usually a timing limitation that doesn't always allow wpUnzip or wpConfig to complete. A number of retrys for each installation task are attempted and if they all fail, the installation fails. </p>
 
-<p>Make a copy of mod-wp/site-config-sample.php and rename the copy to  mod-wp/site-config.php.  Edit the new file for with your site's database configuration and username and login.</p>
+<p>A mechanism was also added to increase the script execution time each time a retry is attempted. </p>
+
+<p>Even upon failure,  if you just do a hard refresh of the page and restart the install, the new attempt will usually be successful.</p>
+
+<p>For more information on troubleshooting script timing issues, see the <strong>'Timing Issues'</strong> section under <strong>'Errors'</strong>.</p>
+
+<h2>
+<a id="json-configuration-files" class="anchor" href="#json-configuration-files" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>JSON Configuration files</h2>
+
+<p>JSON may be easy to use, but it will choke quite badly if you add an extra comma or miss a quotation mark. </p>
+
+<p>If Mod WP refuses to start due to a JSON parsing error, do a <a href="https://goo.gl/rwGt8O">web search</a>  for a JSON validator, paste in your configuration file and let it catch your mistake. </p>
+
+<p><strong>Common JSON Errors</strong></p>
+
+<p><strong><em>Syntax Error - Extra Comma</em></strong></p>
+
+<p>You added a comma at the end of a section (extra comma for the table_prefix setting) : </p>
+
+<pre><code>    "wp_config": {
+            "DB_HOST": "localhost",
+            "DB_NAME": "YOUR_DATABASE_NAME",
+            "DB_PASSWORD": "YOUR_DATABASE_PASSWORD",
+            "DB_USER": "YOUR_DATABASE_USERNAME",
+            "table_prefix": "wp_",
+        },
+</code></pre>
+
+<p><strong><em>Syntax Error - Missing Comma</em></strong></p>
+
+<ul>
+<li>
+<p>You forgot to add comma for a setting(missing comma for DB_NAME)</p>
+
+<pre><code>"wp_config": {
+        "DB_HOST": "localhost",
+        "DB_NAME": "YOUR_DATABASE_NAME"
+        "DB_PASSWORD": "YOUR_DATABASE_PASSWORD",
+        "DB_USER": "YOUR_DATABASE_USERNAME",
+        "table_prefix": "wp_"
+    },
+</code></pre>
+</li>
+</ul>
+
+<p><strong><em>Correct Syntax</em></strong></p>
+
+<pre><code>"wp_config": {
+        "DB_HOST": "localhost",
+        "DB_NAME": "YOUR_DATABASE_NAME",
+        "DB_PASSWORD": "YOUR_DATABASE_PASSWORD",
+        "DB_USER": "YOUR_DATABASE_USERNAME",
+        "table_prefix": "wp_",
+    },
+</code></pre>
+
+<h2>
+<a id="errors--installation-failures" class="anchor" href="#errors--installation-failures" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Errors &amp; Installation Failures</h2>
+
+<p><strong>'Cannot proceed without a config-site.json file! Create one from <code>config-site-sample.json</code>'</strong></p>
+
+<p>Make a copy of mod-wp/config-site-sample.json and rename the copy to  mod-wp/config-site.json.  Edit the new file with your site's database configuration and username and login. See the <em>Configuration</em> section for more information.</p>
+
+<p><strong>Timing Issues</strong> 
+<strong>e.g.:</strong> <strong>Install failed during wpUnzip, please check your settings and try again.</strong></p>
+
+<p>Usually this is the result of a timing issue with how long it takes to delete and unzip your files and how long the script is allowed to run per your PHP  settings.</p>
+
+<p>Try  restarting the install again. If after repeated attempts it still doesn't work, you can adjust how long PHP allows the script to run by trying one of the following:</p>
+
+<p><em>option 1, Edit config-site.json and change max_execution_time</em></p>
+
+<pre><code>    "general": {
+    ...
+    "max_execution_time": 300,
+    ...
+    },
+</code></pre>
+
+<p><em>option 2, Edit the php.ini file</em></p>
+
+<pre><code>; Maximum execution time of each script, in seconds
+max_execution_time = 120
+</code></pre>
+
+<p><strong>Cannot create the WordPress database...</strong></p>
+
+<p>This error occurs because the credentials you provided do not have permissions to create a WordPress database. You can still continue, but you'll need to create the database manually or provide credentials for a user that has been granted the 'Create' permission.</p>
+
+<p>Either update the config-site.json with user credentials that have permissions to create a database, or do one of the following:</p>
+
+<p><em>For shared web hosting accounts</em></p>
+
+<p>Use the Control Panel or phpMyAdmin tools that are provided by your web hosting provider. </p>
+
+<p><em>By Command Line:</em></p>
+
+<p>Login using MySQL credentials with permissions to create a database:</p>
+
+<pre><code>mysql -u username -p
+password:******
+</code></pre>
+
+<p>Execute the Create Database query:</p>
+
+<pre><code>mysql&gt; CREATE DATABASE IF NOT EXISTS `YOUR_DB_NAME`;
+</code></pre>
+
+<p><em>Using a MySQL Query</em></p>
+
+<p>While logged in as a user with the create permissions into a MySQL Admin tool such as phpMyAdmin, Netbeans, or Toad, execute the following query:</p>
+
+<pre><code>CREATE DATABASE IF NOT EXISTS `YOUR_DB_NAME`
+</code></pre>
+
+<p><strong>Cannot drop the existing database ...</strong></p>
+
+<p>You may receive this error when attempting to re-install with a user account that does not have permissions to drop a database.</p>
+
+<p>Either update the config-site.json with user credentials that have permissions to drop a database, or do one of the following:</p>
+
+<p><em>For shared web hosting accounts</em></p>
+
+<p>Use the Control Panel or phpMyAdmin tools that are provided by your web hosting provider. </p>
+
+<p><em>By Command Line:</em></p>
+
+<p>Login using MySQL credentials with permissions to create a database:</p>
+
+<pre><code>mysql -u username -p
+password:******
+</code></pre>
+
+<p>Execute the Drop Database query:</p>
+
+<pre><code>mysql&gt; DROP DATABASE IF EXISTS `YOUR_DB_NAME`;
+</code></pre>
+
+<p><em>Using a MySQL Query</em></p>
+
+<p>While logged in as a user with  drop permissions into a MySQL Admin tool such as phpMyAdmin, Netbeans, or Toad, execute the following query:</p>
+
+<pre><code>DROP DATABASE IF EXISTS `YOUR_DB_NAME`;
+</code></pre>
+
+<p><strong>WordPress pages are generated partially or without styling</strong></p>
+
+<p>When you browse to your WordPress site after installation, pages may appear unstyled or with some text missing. This can occur for several reasons which may include:</p>
+
+<ul>
+<li>a reinstallation occurred into a different directory but <code>wpInstallCore</code>wasn't executed so that it could update the site and home urls.</li>
+<li>the installation was interrupted due to an error</li>
+</ul>
+
+<p>To fix this, simply re-install, setting all options under the Selective Installation tasks to true , except for <code>install_switches:wpResetPassword</code> which should be set to false. You will also have to set  <code>general:Reinstall</code> to true to overwrite your existing database settings. Be aware that this will overwrite your database and the files in your installation directory.</p>
+
+<p>If overwriting is not an option and you are worried about losing data, you can add the following in your wp-config.php file and you should be able to access your site:</p>
+
+<pre><code>define('WP_SITEURL','/path/to/your/wordpress/directory')
+</code></pre>
+
+<p><strong>WordPress page is blank or not accessible after installing from command line</strong></p>
+
+<p>Verify that the <code>general:HTTP_HOST</code> setting is correct and is an accessible domain name that points to the web root that contains your WordPress directory.</p>
+
+<p><strong>Access Denied Errors</strong></p>
+
+<p>You may receive the following types of errors if you are trying to run Mod WP from the command line but are doing it from a shell account that doesn't have permissions to required directories and files:</p>
+
+<pre><code>Warning: rename(wordpress/wp-content,/path/to/wordpress/wp-content): Access is denied. (code: 5) in mod-wp\libs\mod-wp.class.php on line 806
+</code></pre>
+
+<p>or </p>
+
+<pre><code>ERRORS:WordPress has not been downloaded yet ...
+</code></pre>
+
+<p>To fix these errors, you'll need to first login as the owner of the files, or, alternately, change the ownership of all the files to your account.</p>
+
+<p>This is a common issue in cygwin environments where you are trying to install using a console shell that is using a different account than what the server (uWamp/WAMP) used in creating the files.  If, for example, you tried to use a Git for Windows shell to run the script, you'll receive these errors. The fix would be switch to a cygwin shell , verify you have access to the required files, and run  Mod WP from that shell.</p>
+
+<p><strong>WordPress has not been downloaded yet</strong></p>
+
+<p>Usually this error is exactly as it says and you should follow its instructions on how to fix it. The WordPress directory is empty and you are trying to proceed to install without any of the files needed to do the installation.</p>
+
+<p>Alternately, it may  be a result of permissions issues preventing Mod WP from viewing the files that you downloaded. See 'Access Denied Errors'</p>
 
 <p><strong>Memory Errors</strong></p>
 
-<p>If you receive a memory error, increase the <code>memory_limit</code> setting in the php.ini file. 256M should be the most you'll need.</p>
+<p>If you receive a memory error, similar to ***Fatal error: Allowed memory size of xxxx bytes exhausted * , increase the <code>memory_limit</code> setting in the php.ini file. 256M should be the most you'll need. After you install WordPress, you can reset the memory limit to its original value.</p>
 
 <pre><code>; Maximum amount of memory a script may consume (128MB)
 ; http://php.net/memory-limit
@@ -357,7 +737,7 @@ memory_limit = 256M
 
 <p><strong>Table 'dbname.wp_options' doesn't exist'</strong></p>
 
-<p>This occurred intermittently during testing when reinstall=true. The only way that appeared to fix it was to delete wp-config.php, replace it with a copy of config-sample.php with database values replaced for correct connection credentials, and rerun setup with $site[ 'wpDownload' ] = false and $site[ 'wpConfig' ] = false. Once it works, re-run it again with wpConfig enabled so you can get back your configuration. Not sure why this fixes it, it may have something to do with permissions on wp-config.php. </p>
+<p>This occurred intermittently during testing when reinstall=true. The only way that appeared to fix it was to delete wp-config.php, replace it with a copy of config-sample.php with database values replaced for correct connection credentials, and rerun setup with <code>install_switches:wpDownload</code> = false and <code>install_switches:wpConfig</code> = false. Once it works, re-run it again with <code>install_switches:wpConfig</code> = true so you can get back your configuration. Not sure why this fixes it, it may have something to do with permissions on wp-config.php. </p>
 
 <p><strong>Fatal error: Uncaught exception 'ErrorException' with message Directory not empty</strong></p>
 
@@ -367,7 +747,9 @@ memory_limit = 256M
 
 <p>This is likely due to HTTP_HOST not being set to a resolvable host.</p>
 
-<p>We did see this error and fixed it by setting WP_SITEURL before wp_install was callled, setting it to a value calculated from <code>_wpGetSiteUrl</code></p>
+<blockquote>
+<p><em>Developer note:</em> We did see this error and fixed it by setting <code>WP_SITEURL</code> to a value calculated from <code>_wpGetSiteUrl</code>, before <code>wp_install()</code> was callled. Its value was calculated from <code>_wpGetSiteUrl</code></p>
+</blockquote>
 
 <h2>
 <a id="history" class="anchor" href="#history" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>History</h2>
@@ -382,11 +764,11 @@ memory_limit = 256M
 <p>The following changes were made from the original WP Quick Install fork:</p>
 
 <ul>
-<li>The code was refactored into a PHP class that does the heavy lifting</li>
+<li>The code was re-factored into a PHP class that does the heavy lifting</li>
 <li>Command Line Support was added</li>
-<li>A different front end was added, replacing nearly all the original html and javascript</li>
-<li>The original javascript used separate ajax requests for each installation action. The new script loops through a configurable array of actions supplied by the server side script to repeatedly call the same ajax call until all actions are completed. This allows greater flexibility in adding or re-ordering actions without having to edit the javascript.</li>
-<li>The original script parsed ini files for configuration. Mod WP instead uses 2 configuration files that are PHP scripts. The reason ini files were abandones was due to an apparent bug that prevented the ini parser to handle complex passwords.</li>
+<li>A different front end was added, replacing nearly all the original html and Javascript</li>
+<li>The original Javascript used separate Ajax requests for each installation action. The new script loops through a configurable array of actions supplied by the server side script to repeatedly call the same ajax call until all actions are completed. This allows greater flexibility in adding or re-ordering actions without having to edit the Javascript.</li>
+<li>The original script parsed ini files for configuration. Mod WP instead uses 2 configuration files that are PHP scripts. The reason ini files were abandoned was due to an apparent bug that prevented the ini parser from handling complex passwords.</li>
 <li>Passwords are handled more securely - the database password is never revealed or editable on the browser page, and the WP admin password is automatically generated by a cryptographically secure function with no option for the user to create their own. This not only ensures a strong password, but it also means there is no risk that the same password will be used for each new installation.</li>
 <li>Configuration options were renamed to be more consistent with WordPress standards.  See the Configuration section for more detail.</li>
 <li>Site Profiles were added. Profiles contain non-site specific installation options such as which  plugins and themes should be installed. They should not contain any options that require you to specify a options that can't be used for multiple sites (for example, domain name or admin user name)</li>
