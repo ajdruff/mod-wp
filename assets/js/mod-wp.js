@@ -17,8 +17,9 @@ $(document).ready(function () {
     modwp_install.setUpConfigTable = function () {
 
 
-        $('#site_config').html((getConfigAsHTML(SITE_CONFIG, 'SITE_CONFIG')));
-        $('#profile_config').html((getConfigAsHTML(PROFILE_CONFIG, 'PROFILE_CONFIG')));
+        $('#site_config_basic').html((getConfigAsHTML(SITE_CONFIG, 'SITE_CONFIG', 'main')));
+        $('#site_config_advanced').html((getConfigAsHTML(SITE_CONFIG, 'SITE_CONFIG', 'advanced')));
+        $('#profile_config').html((getConfigAsHTML(PROFILE_CONFIG, 'PROFILE_CONFIG', 'all')));
 
     }
 
@@ -40,7 +41,10 @@ $(document).ready(function () {
             PROFILE_CONFIG = response.PROFILE_CONFIG;
 
 
-            $('#profile_config').html((getConfigAsHTML(PROFILE_CONFIG, 'PROFILE_CONFIG')));
+          //  $('#profile_config').html((getConfigAsHTML(PROFILE_CONFIG, 'PROFILE_CONFIG')));
+            
+            $('#profile_config').html((getConfigAsHTML(PROFILE_CONFIG, 'PROFILE_CONFIG', 'all')));
+            
 
         })
         return false;
@@ -51,162 +55,245 @@ $(document).ready(function () {
 
 
     /**
+     * Get HTML For The Profile DropDown
+     *
+     * @param none
+     * @return string The html for the dropdown
+     */
+
+    function getProfileDropDownHTML(section, setting_name, setting_value, input_array_name) {
+        var config_id = '[' + section + '][' + setting_name + ']';
+        var profile_select_html;
+        profile_select_html = '';
+        selected = '';
+        for (var profile in PROFILES) {
+            if (PROFILES[profile] === setting_value) {
+                selected = 'selected';
+            } else {
+                selected = ''
+            }
+            profile_select_html = profile_select_html + '<option ' + selected + ' value="' + PROFILES[profile] + '">' + PROFILES[profile] + '</option>';
+        }
+
+
+
+        html_value = '<select class="form-control" id="profile" name="' + input_array_name + config_id + '"> ' + profile_select_html + '</select>';
+        return html_value;
+
+
+    }
+    /**
+     * Get Config Label
+     *
+     * Get the configuration label
+     */
+
+    function getConfigLabel(section, setting_name) {
+
+
+
+        var config_id = section + ' : ' + setting_name;
+
+
+
+
+        if (typeof (CONFIG_PROPS[section][setting_name]) !== 'undefined' && typeof (CONFIG_PROPS[section][setting_name].label) !== 'undefined') {
+            label = CONFIG_PROPS[section][setting_name].label + '<div style="font-size:12px";>' + config_id + '</div>';
+
+        }
+        else {
+            label = config_id;
+
+        }
+        return label;
+    }
+    /**
+     * Get Config Label
+     *
+     * Get the configuration label
+     */
+
+    function getConfigDescription(section, setting_name) {
+
+        var config_id = section + ' : ' + setting_name;
+
+        var description;
+        if (typeof (CONFIG_PROPS[section][setting_name]) !== 'undefined' && typeof (CONFIG_PROPS[section][setting_name].description) !== 'undefined') {
+
+
+            description = CONFIG_PROPS[section][setting_name].description;
+
+        }
+        else {
+            description = '';
+
+        }
+        return description;
+    }
+
+    /**
+     * Get HTML For Non-editable Elements
+     *
+     * @param mixed setting_value The settings value
+     * @return string The html for the element
+     */
+
+    function getSettingHtml(setting_value) {
+
+
+        var html_value;
+
+        //use displayed_value if applicable
+        if ((typeof (setting_value) == "boolean")) {
+
+
+            html_value = (setting_value == true) ? '<span class="control-group   glyphicon glyphicon-ok" style="color:green"></span>' : '<span class="glyphicon glyphicon-remove" style="color:red"></span>';
+
+        } else {
+
+            html_value = '<span class="control-group">' + setting_value + '</span>';
+        }
+
+
+
+        return html_value;
+    }
+
+
+    /**
+     * Get HTML For Editable Elements
+     *
+     * @param mixed config_name The form field name
+     * @param mixed The form field value
+     * @return string The html for the element
+     */
+
+    function getSettingHtmlEditable(section, setting_name, setting_value, input_array_name) {
+
+
+        var config_id = '[' + section + '][' + setting_name + ']';
+
+
+
+
+
+
+
+
+        if ((typeof (setting_value) == "boolean")) {
+            checked = (setting_value == true) ? 'checked' : '';
+
+
+
+
+
+            html_value = '<input type="checkbox" ' + checked + ' name="no_input_' + input_array_name + config_id + '" value="' + setting_value + '"><input type="hidden"  value="' + setting_value + '">';
+
+        } else {
+
+
+
+
+            html_value = '<input class="form-control  "  type="text" name="' + input_array_name + config_id + '" value="' + setting_value + '">';
+
+
+
+        }
+
+
+
+
+        return html_value;
+
+    }
+    /**
      * Get Config Object as HTML
      * 
      * Returns a configuration object as HTML
+     * Iterates through the configuration object 'PROFILE_CONFIG' or 'SITE_CONFIG' and returns the html of each configuration value.
+     * For example, for SITE_CONFIG[wp_directory], it will return a non-editable string.
+     * If the value is an object, for example, [wp_options], 
+     * it will recursively call itself with parent_object_key with a string whose value is equal to the parent object's key.
+     * The initial call 
      * 
      * param object config_obj The configuration paramaters as a json object. 
-     * input_array_name string The name to use for our form's input array. 
+     * input_array_name string The name to use for our form's input array. i.e. 'PROFILE_CONFIG' or 'SITE_CONFIG'
+     * parent_object_key string The key of the config_obj's parent object. Only needed if function is called recursively. For example, when the function encounters [wp_options], it calls itself recursively setting config_obj = SITE_CONFIG[wp_options] and setting parent_object's key equal to 'wp_options', getConfigAsHTML(SITE_CONFIG[wp_options],'SITE_CONFIG','wp_options')
+     * 
+     *   
      */
-
-    function getConfigAsHTML(config_obj, input_array_name) {
-
-        /**
-         * Get HTML For The Profile DropDown
-         *
-         * @param none
-         * @return string The html for the dropdown
-         */
-
-        function getProfileDropDownHTML(config_name) {
-            var profile_select_html;
-            profile_select_html = '';
-            selected='';
-            for (var profile in PROFILES) {
-                if (PROFILES[profile] ===SITE_CONFIG['profile']) {
-                  selected='selected';  
-                }else {selected=''}
-                profile_select_html = profile_select_html + '<option '+selected+' value="' + PROFILES[profile] + '">' + PROFILES[profile] + '</option>';
-            }
-
-
-            return "<tr><td>" + config_name.replace(input_array_name, '') + '</td><td><select id="profile" name="' + input_array_name + '[profile]"> ' + profile_select_html + '</select></td></tr>';
-
-        }
-
-        /**
-         * Get HTML For Non-editable Elements
-         *
-         * @param mixed config_name The form field name
-         * @param mixed The form field value
-         * @return string The html for the element
-         */
-
-        function getNonEditableHtml(config_name, config_value) {
-
-            var displayed_value = config_value;
-            var html;
-            //use displayed_value if applicable
-            if ((typeof (config_value) == "boolean")) {
-
-
-                displayed_value = (config_value == true) ? '<span class="glyphicon glyphicon-ok" style="color:green"></span>' : '<span class="glyphicon glyphicon-remove" style="color:red"></span>';
-
-            }
-
-
-            html = '<tr><td>' + config_name.replace(input_array_name, '') + '</td><td>' + displayed_value + '</td></tr>';
-            return html;
-        }
-
-
-        /**
-         * Get HTML For Editable Elements
-         *
-         * @param mixed config_name The form field name
-         * @param mixed The form field value
-         * @return string The html for the element
-         */
-
-        function getEditableHtml(config_name, config_value) {
-
-            if ((typeof (config_value) == "boolean")) {
-                checked = (config_value == true) ? 'checked' : '';
-
-
-
-
-                html = '<tr><td>' + config_name.replace(input_array_name, '') + '</td><td><input type="checkbox" ' + checked + ' name="no_input_' + config_name + '" value="' + config_value + '"><input type="hidden"  name="' + config_name + '" value="' + config_value + '"></td></tr>';
-
-            } else {
-
-                html = '<tr><td>' + config_name.replace(input_array_name, '') + '</td><td><input type="text" name="' + config_name + '" value="' + config_value + '"></td></tr>';
-            }
-
-            return html;
-
-        }
+    function getConfigAsHTML(config_obj, input_array_name, tab) {
 
 
 
         var table = '';
-        var config_name = null;
-        var value = null;
-        var displayed_value = null;
-        var checked = null;
 
 
-        for (var config_name in config_obj) {
-            config_value = config_obj[config_name];
-       
 
-           
-            var is_editable = null;
+        var section = null;
+        var setting = null;
+        var setting_name = null;
 
-            if (config_value instanceof Object) {
+        for (var section in config_obj) {
 
+            setting = config_obj[section];
+            for (var setting_name in setting) {
+                setting_value = setting[setting_name];
+                //if the property is marked editable and its in the site_config file, make it editable. 
+                is_editable = CONFIG_PROPS[section][setting_name].editable && input_array_name === 'SITE_CONFIG';
 
-                //if the config_value is an object also, we iterate it through it again
-                config_category = config_name;//now that we have an array (or object), our first dimension is the 'category' and the second is the name
-                config_object = config_value;//the value is now the object
-                for (var config_name in config_object) {
-
-                    config_value = config_object[config_name];
-                    displayed_value = config_value;
-                    is_editable = editable_props[config_category] != null && editable_props[config_category][config_name] != null && editable_props[config_category][config_name];
-
-                    //check if we need to add an editable field for the user
-                    if (is_editable) {
-
-
-                        table = table.concat(getEditableHtml(input_array_name + '[' + config_category + '][' + config_name + ']', config_value));
-
-
-                    } else if (!is_editable) {
-
-
-                        table = table.concat(getNonEditableHtml(input_array_name + '[' + config_category + '][' + config_name + ']', config_value));
-
-                    }
+                //skip those settings that aren't intended for the requested tab
+                matches_tab = CONFIG_PROPS[section][setting_name].tab === tab;
+                if (!matches_tab && tab !== 'all') {
+                    continue;
                 }
-
-            } else {
-
-                is_editable = editable_props[config_name] != null && editable_props[config_name];
-
                 //provide a dropdown for the profile names
-                if (config_name === 'profile') {
+                if (setting_name === 'profile') {
 
-                    table = table.concat(getProfileDropDownHTML(input_array_name + '[' + config_name + ']'));
+
+
+                    html_value = getProfileDropDownHTML(section, setting_name, setting_value, input_array_name);
                 }
                 else if (is_editable) {
 
 
 
-                    table = table.concat(getEditableHtml(input_array_name + '[' + config_name + ']', config_value));
+                    html_value = getSettingHtmlEditable(section, setting_name, setting_value, input_array_name);
+
+
+
                 }
                 else if (!is_editable) {
 
 
-                    table = table.concat(getNonEditableHtml(input_array_name + '[' + config_name + ']', config_value));
+                    html_value = getSettingHtml(setting_value);
+
+
+
 
                 }
+
+
+
+                html = '<tr class="form-group">'
+                        + '<td>'
+                        + '<label >' + getConfigLabel(section, setting_name) + '</label>'
+                        + '<div ><em >' + getConfigDescription(section, setting_name) + '</em></div>'
+                        + '</td>'
+                        + '<td >'
+
+                        + html_value
+
+
+                        + '</td>'
+                        + '</tr>';
+                table = table.concat(html);
+
             }
 
 
-
-
         }
+
 
 
 
@@ -214,6 +301,7 @@ $(document).ready(function () {
 
 
     }
+
 
 //setup Events
 
@@ -259,10 +347,24 @@ $(document).ready(function () {
         var progress_bar_width = 0; //keep track of width updates.
 
         $('#submit').click(function () {
+            //note: this click even can be removed and the form will still work because the  $("#install_form").validate(rules); would do the work. we add it here to make it more explicit for easier troubleshooting.
+            $("#install_form").submit(); //this triggers form validation which in turn triggers submitHandler: if valid
+            return false;//must return false or you'll get 2 form submits.
+        });
+
+        /**
+         * Short Description
+         *
+         * Long
+         * @param string $content The shortcode content
+         * @return string The parsed output of the form body tag
+         */
+
+        function resetForm() {
             retry = 0;
 
-            $(this).attr("disabled", true);
-            $(this).prop("disabled", true);
+            $('#submit').attr("disabled", true);
+            $('#submit').prop("disabled", true);
             $('#submit').html('Installing WordPress...');
             $('#install_messages').html('');
             $('#install_messages').hide();
@@ -274,10 +376,46 @@ $(document).ready(function () {
             progress_bar_width = progress_bar_width + 10;
             $('.progress-bar').animate({width: progress_bar_width + "%", "aria-valuenow": progress_bar_width});
 
-            install('start');
+        }
 
-            return false;
-        });
+
+
+
+        var rules = {
+            rules: {
+                'SITE_CONFIG[wp_options][blogname]': {
+                    minlength: 2,
+                    required: true
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                message: {
+                    minlength: 2,
+                    required: true
+                }
+            },
+            highlight: function (element) {
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+
+            },
+            success: function (element) {
+
+                element.text('').addClass('valid')
+                        .closest('.form-group').removeClass('has-error').addClass('has-success');
+            },
+            onfocusout: false,
+            onkeyup: false,
+            submitHandler: function () {
+                resetForm();
+                install('start');
+            }
+
+        };
+
+
+        $("#install_form").validate(rules);
 
         /**
          * Install
@@ -418,11 +556,13 @@ $(document).ready(function () {
     }
 
 
-
-
     modwp_install.setUpConfigTable();
     modwp_install.setupEvents();
     modwp_install.install();
+
+
+
+
 
 
 });

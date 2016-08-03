@@ -1,0 +1,80 @@
+{
+	"general": {
+		"activate_plugins": true,
+		"add_custom_content": false,
+		"add_custom_plugins": true,
+		"add_custom_themes": true,
+		"allow_search_engines": true,
+		"install_dropin": false,
+		"move_wpconfig": true,
+		"plugins": [
+		],
+		"remove_default_content": true,
+		"remove_default_plugins": true,
+		"remove_default_themes": false,
+		"remove_file_cruft": false,
+		"script_debug": false,
+		"set_media_options": false,
+		"set_permissions": true,
+		"wp_directory": ""
+	},
+	"wp_options": {
+		"large_size_h": 1024,
+		"large_size_w": 1024,
+		"medium_size_h": 300,
+		"medium_size_w": 301,
+		"permalink_structure": "%postname%",
+		"template": "",
+		"thumbnail_crop": false,
+		"thumbnail_size_h": 150,
+		"thumbnail_size_w": 150,
+		"uploads_use_yearmonth_folders": false
+	},
+	"wp_config": {
+		"AUTOSAVE_INTERVAL": 7200,
+		"DISALLOW_FILE_EDIT": true,
+		"media": "uploads",
+		"WP_DEBUG": false,
+		"WP_DEBUG_DISPLAY": false,
+		"WP_DEBUG_LOG": false,
+		"WP_POST_REVISIONS": false,
+		"WPCOM_API_KEY": "",
+		"WPLANG": "en_US"
+	},
+	"content": {
+		"posts": [
+			{
+				"title": "Mod WP",
+				"status": "publish",
+				"type": "post",
+				"slug": "mod-wp-welcome",
+				"parent": "",
+				"content": "Thanks for installing WordPress using the Mod WP WordPress Installer!"
+			},
+			{
+				"title": "Example Preinstalled Post",
+				"status": "publish",
+				"type": "post",
+				"slug": "example-post",
+				"parent": "Mod WP",
+				"content": "This post was automatically added when WordPress was installed using Mod WP. If you don't want this content, re-install setting 'general:add_custom_content' to false. To modify it, edit the config-site.json or config-profile.json file."
+			},
+			{
+				"title": "About Mod WP",
+				"status": "publish",
+				"type": "page",
+				"slug": "about",
+				"parent": "",
+				"content": "Do you install multiple WordPress sites for clients or for your business? You need  Mod WP. Simply configure, upload the script and run the installer. You'll get the following benefits: a clean installation (no 'Hello World' content, no example comments,plugins,themes etc., the ability to add your own custom themes, plugins and content that will be automatically added with each installation,automatic cryptographically secure password generation, and a more secure setup of your WordPress configuration files. "
+			},
+			{
+				"title": "About Me",
+				"status": "publish",
+				"type": "page",
+				"slug": "me",
+				"parent": "About Mod WP",
+				"content": "This is a little about me."
+			}
+		]
+	}
+}

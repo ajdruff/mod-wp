@@ -1,0 +1,732 @@
+{
+    "general": {
+        "activate_plugins": {
+            "default": true,
+            "description": "Activate installed plugins.",
+            "editable": true,
+            "view_web": true,
+            "label": "Activate Plugins.",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+
+        },
+        "add_custom_content": {
+            "default": false,
+            "description": "Adds your custom posts and pages.",
+            "editable": false,
+            "view_web": true,
+            "label": "Add Custom Content",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+        },
+        "add_custom_plugins": {
+            "default": true,
+            "description": "Adds your  custom plugins.",
+            "editable": false,
+            "view_web": true,
+            "label": "Add Custom Plugins",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "add_custom_themes": {
+            "default": true,
+            "description": "Adds your  custom themes.",
+            "editable": false,
+            "view_web": true,
+            "label": "Add Custom Themes",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "allow_search_engines": {
+            "default": true,
+            "description": "Allow Google and other search engines to crawl your site by creating a virtual robots.txt url.",
+            "editable": true,
+            "view_web": true,
+            "label": "Allow search engines",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "show_exceptions": {
+            "default": false,
+            "description": "Shows Mod WP exception trace. Turn on only if you are debugging Mod WP (not WordPress)",
+            "editable": true,
+            "view_web": true,
+            "label": "Show Exceptions",
+            "tab": "advanced",
+            "site": true,
+            "profile": false
+
+
+        },
+        "HTTP_HOST": {
+            "default": "example.com",
+            "description": "e.g. example.com. The domain of your site. It is used to tell the command line what domain to use when generating the WordPress site and home urls. When you install by the web form, the install ignores this value and instead uses the predefined  $_SERVER['HTTP_HOST'] variable.",
+            "editable": false,
+            "view_web": false,
+            "label": "Domain",
+            "tab": "advanced",
+            "site": true,
+            "profile": false
+
+
+        },
+        "install_dropin": {
+            "default": false,
+            "description": "Execute the install-dropin.php file in place, containing your customized version of WordPress's wp_install_default() function.",
+            "editable": true,
+            "view_web": true,
+            "label": "Install Dropin",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "max_execution_time": {
+            "default": 0,
+            "description": "Maximum Execution Time allowed for a PHP script. Set this value to at least 300 if you are recieving installation failures due to timing issues.A value of 0 or less will cause the value in the php.ini to be used instead.",
+            "editable": true,
+            "view_web": true,
+            "label": "Max Execution Time",
+            "tab": "advanced",
+            "site": true,
+            "profile": false
+
+
+        },
+        "move_wpconfig": {
+            "default": true,
+            "description": "This determines whether the `wp-config.php` file is moved to a separate 'config' directory that can be placed in the same directory as root (default) or, more securely, above the web root. ",
+            "editable": true,
+            "view_web": true,
+            "label": "Move wp-config.php",
+            "tab": "advanced",
+            "site": true,
+            "profile": true
+
+
+        },
+        "plugins": {
+            "default": [],
+            "description": "Plugins to download and install from the WordPress plugins directory.",
+            "editable": false,
+            "view_web": true,
+            "label": "Plugins",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "profile": {
+            "default": "default",
+            "description": "Select a profile, a collection of WordPress settings, plugins and themes that are grouped together in the profiles directory.",
+            "editable": true,
+            "view_web": true,
+            "label": "Profile",
+            "tab": "main",
+            "site": true,
+            "profile": false
+
+
+        },
+        "reinstall": {
+            "default": false,
+            "description": "Forces the overwrite of the WordPress installation directory and database.",
+            "editable": true,
+            "view_web": true,
+            "label": "Reinstall",
+            "tab": "advanced",
+            "site": true,
+            "profile": false
+
+
+        },
+        "remove_default_content": {
+            "default": true,
+            "description": "Remove WordPress's default  post ('Hello World', pages, and comments)",
+            "editable": true,
+            "view_web": true,
+            "label": "Remove default content.",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "remove_default_plugins": {
+            "default": true,
+            "description": "Remove default plugins (Hello Dolly).",
+            "editable": true,
+            "view_web": true,
+            "label": "Remove default plugins.",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "remove_default_themes": {
+            "default": false,
+            "description": "Remove all default themes except for that which is selected to become active.",
+            "editable": true,
+            "view_web": true,
+            "label": "Remove default themes.",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "remove_file_cruft": {
+            "default": false,
+            "description": "Remove license.txt and readme.txt and other non-essential files that are not required for WordPress functionality.",
+            "editable": true,
+            "view_web": true,
+            "label": "Remove file cruft.",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "script_debug": {
+            "default": false,
+            "description": "Uses uncompressed version of javascript scripts for easier debugging.",
+            "editable": true,
+            "view_web": true,
+            "label": "Script Debug",
+            "tab": "advanced",
+            "site": true,
+            "profile": true
+
+
+        },
+        "set_media_options": {
+            "default": false,
+            "description": "Apply thumbnail and image sizes and crop settings.",
+            "editable": true,
+            "view_web": true,
+            "label": "Set Media Options.",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "set_permissions": {
+            "default": true,
+            "description": "Attempt to set file permissions, locking down configuration files and preventing unauthorized access.",
+            "editable": true,
+            "view_web": true,
+            "label": "Set Permissions",
+            "tab": "advanced",
+            "site": true,
+            "profile": true
+
+
+        },
+        "slide_rule": {
+            "default": false,
+            "description": "Creates  `_live` , `_stage`, and `_dev` `wp-config.php` files when used with the <a href=\"https://github.com/ajdruff/slide-rule\">Slide Rule project</a>",
+            "editable": true,
+            "view_web": true,
+            "label": "Slide Rule",
+            "tab": "advanced",
+            "site": true,
+            "profile": false
+
+
+        },
+        "wp_directory": {
+            "default": "",
+            "description": "The name of the directory to install WordPress. Leave empty to install in your web site's root.",
+            "editable": true,
+            "view_web": true,
+            "label": "WordPress Directory",
+            "tab": "advanced",
+            "site": true,
+            "profile": true
+
+
+        }
+
+    },
+    "wp_options": {
+        "blogdescription": {
+            "default": "Just Another WordPress Site",
+            "description": "A short description of your site that will appear beneath your blog name",
+            "editable": true,
+            "view_web": true,
+            "label": "Blog Description",
+            "tab": "main",
+            "site": true,
+            "profile": false
+
+
+        },
+        "blogname": {
+            "default": "My WordPress Site",
+            "description": "Your Blog's name",
+            "editable": true,
+            "view_web": true,
+            "label": "Blog Name",
+            "tab": "main",
+            "site": true,
+            "profile": false
+
+
+        },
+        "large_size_h": {
+            "default": 1024,
+            "description": "The height in pixels of a large post image.",
+            "editable": true,
+            "view_web": true,
+            "label": "Large post image size (Height)",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "large_size_w": {
+            "default": 1024,
+            "description": "The width in pixels of a large post image.",
+            "editable": true,
+            "view_web": true,
+            "label": "Large post image size (Width)",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "medium_size_h": {
+            "default": 300,
+            "description": "The height in pixels of a medium post image.",
+            "editable": true,
+            "view_web": true,
+            "label": "Medium post image size (Height)",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "medium_size_w": {
+            "default": 301,
+            "description": "The width in pixels of a medium post image.",
+            "editable": true,
+            "view_web": true,
+            "label": "Medium post image size (Width)",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "permalink_structure": {
+            "default": "%postname%",
+            "description": "The  permalink structure used for WordPress urls. <a href=\"https://codex.wordpress.org/Using_Permalinks\">Codex</a>",
+            "editable": true,
+            "view_web": true,
+            "label": "Permalink Structure",
+            "tab": "advanced",
+            "site": true,
+            "profile": true
+
+
+        },
+        "template": {
+            "default": "",
+            "description": "The WordPress theme to be selected upon installation. The theme must be available after wpInstallThemes  and remove_themes",
+            "editable": false,
+            "view_web": true,
+            "label": "Theme",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "thumbnail_crop": {
+            "default": false,
+            "description": "Crop mode. True = hard cropped from center. False, soft crop(resize). May also set as array, e.g: array('center','top') <a href=\"https://havecamerawilltravel.com/photographer/wordpress-thumbnail-crop\">WordPress Cropping Guide</a>",
+            "editable": true,
+            "view_web": true,
+            "label": "Thumbnail Crop",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "thumbnail_size_h": {
+            "default": 150,
+            "description": "The height in pixels of a post thumbnail.",
+            "editable": true,
+            "view_web": true,
+            "label": "Thumbnail Size (Height)",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "thumbnail_size_w": {
+            "default": 150,
+            "description": "The width in pixels of a post thumbnail.",
+            "editable": true,
+            "view_web": true,
+            "label": "Thumbnail Size (Width)",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "uploads_use_yearmonth_folders": {
+            "default": false,
+            "description": "Organize Uploads Into Year/Month Folders.",
+            "editable": true,
+            "view_web": true,
+            "label": "Use Year/Month/Folders",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        }
+    },
+    "wp_config": {
+        "AUTOSAVE_INTERVAL": {
+            "default": 7200,
+            "description": "Time interval between autosaves. <a href=\"https://codex.wordpress.org/Editing_wp-config.php\">Codex Reference</a>",
+            "editable": false,
+            "view_web": true,
+            "label": "Autosave Interval",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "DB_HOST": {
+            "default": "localhost",
+            "description": "The hostname used by the database server.",
+            "editable": false,
+            "view_web": false,
+            "label": "Database Host",
+            "tab": "advanced",
+            "site": true,
+            "profile": false
+
+
+        },
+        "DB_NAME": {
+            "default": "YOUR_DATABASE_NAME",
+            "description": "The name of the WordPress database.",
+            "editable": false,
+            "view_web": false,
+            "label": "Database name",
+            "tab": "advanced",
+            "site": true,
+            "profile": false
+
+
+        },
+        "DB_PASSWORD": {
+            "default": "YOUR_DATABASE_PASSWORD",
+            "description": "The database user's password.",
+            "editable": false,
+            "view_web": false,
+            "label": "Database password",
+            "tab": "advanced",
+            "site": true,
+            "profile": false
+
+
+        },
+        "DB_USER": {
+            "default": "YOUR_DATABASE_USERNAME",
+            "description": "The username of the database user.",
+            "editable": false,
+            "view_web": false,
+            "label": "Database user",
+            "tab": "advanced",
+            "site": true,
+            "profile": false
+
+
+        },
+        "DISALLOW_FILE_EDIT": {
+            "default": true,
+            "description": "Disables file editing for theme and plugin files from within the Admin panels. <a href=\"https://codex.wordpress.org/Editing_wp-config.php\">Codex Reference</a>",
+            "editable": false,
+            "view_web": true,
+            "label": "DISALLOW_FILE_EDIT",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "media": {
+            "default": "uploads",
+            "description": "The name of the directory that receives uploads.",
+            "editable": false,
+            "view_web": true,
+            "label": "Upload directory name",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "table_prefix": {
+            "default": "wp_",
+            "description": "The WordPress database table prefix",
+            "editable": false,
+            "view_web": false,
+            "label": "Database table prefix",
+            "tab": "advanced",
+            "site": true,
+            "profile": false
+
+
+        },
+        "WP_DEBUG": {
+            "default": false,
+            "description": "Controls the reporting of some errors and warnings and enables use of the WP_DEBUG_DISPLAY and WP_DEBUG_LOG settings. <a href=\"https://codex.wordpress.org/Editing_wp-config.php\">Codex Reference</a>",
+            "editable": true,
+            "view_web": true,
+            "label": "WP_DEBUG",
+            "tab": "advanced",
+            "site": true,
+            "profile": true
+
+
+        },
+        "WP_DEBUG_DISPLAY": {
+            "default": false,
+            "description": "Prints PHP errors to screen. <a href=\"https://codex.wordpress.org/Editing_wp-config.php\">Codex Reference</a>",
+            "editable": true,
+            "view_web": true,
+            "label": "WP_DEBUG_DISPLAY",
+            "tab": "advanced",
+            "site": true,
+            "profile": true
+
+
+        },
+        "WP_DEBUG_LOG": {
+            "default": false,
+            "description": "Logs PHP errors to an debug.log to wp-content. <a href=\"https://codex.wordpress.org/Editing_wp-config.php\">Codex Reference</a>",
+            "editable": true,
+            "view_web": true,
+            "label": "WP_DEBUG_LOG",
+            "tab": "advanced",
+            "site": true,
+            "profile": true
+
+
+        },
+        "WP_POST_REVISIONS": {
+            "default": false,
+            "description": "Specifies Post Revision option. <a href=\"https://codex.wordpress.org/Revisions\">Codex Reference</a>",
+            "editable": false,
+            "view_web": true,
+            "label": "WordPress Revisions",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        },
+        "WPCOM_API_KEY": {
+            "default": "",
+            "description": "Your WordPress API key. Used for askimet, jetpack and other Automattic services. <a href=\"https://en.support.wordpress.com/api-keys/\">Codex Reference</a",
+            "editable": true,
+            "view_web": true,
+            "label": "WPCOM_API_KEY",
+            "tab": "advanced",
+            "site": true,
+            "profile": true
+
+
+        },
+        "WPLANG": {
+            "default": "en_US",
+            "description": "WordPress language. <a href=\"https://codex.wordpress.org/Installing_WordPress_in_Your_Language\">Codex Reference</a>",
+            "editable": false,
+            "view_web": true,
+            "label": "WordPress language.",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+        }
+    },
+    "wp_users": {
+        "user_email": {
+            "default": "admin@example.com",
+            "description": "The WordPress admin user's email address",
+            "editable": false,
+            "view_web": false,
+            "label": "WordPress admin email address",
+            "tab": "advanced",
+            "site": true,
+            "profile": false
+
+
+        },
+        "user_login": {
+            "default": "admin",
+            "description": "The WordPress admin username",
+            "editable": false,
+            "view_web": false,
+            "label": "WordPress admin username",
+            "tab": "advanced",
+            "site": true,
+            "profile": false
+
+
+        }
+    },
+    "install_switches": {
+        "wpDownload": {
+            "default": true,
+            "description": "Download the latest version of WordPress and extract it to the WordPress installation directory.",
+            "editable": true,
+            "view_web": true,
+            "label": "Install Switch - Download",
+            "tab": "advanced",
+            "site": true,
+            "profile": false
+
+
+        },
+        "wpConfig": {
+            "default": true,
+            "description": "Create wp-config.php files and update the wp-options table with site and profile settings.",
+            "editable": true,
+            "view_web": true,
+            "label": "Install Switch - Config",
+            "tab": "advanced",
+            "site": true,
+            "profile": false
+
+
+        },
+        "wpInstallCore": {
+            "default": true,
+            "description": "Install WordPress. Includes creating WordPress database tables and adding users",
+            "editable": true,
+            "view_web": true,
+            "label": "Install Switch - Core",
+            "tab": "advanced",
+            "site": true,
+            "profile": false
+
+
+        },
+        "wpInstallThemes": {
+            "default": true,
+            "description": "Install themes by copying over any directory or zip file from the Profile's 'themes' directory.",
+            "editable": true,
+            "view_web": true,
+            "label": "Install Switch - Themes",
+            "tab": "advanced",
+            "site": true,
+            "profile": false
+
+
+
+        },
+        "wpInstallPlugins": {
+            "default": true,
+            "description": "Install plugins by copying over any directory or zip file from the Profile's 'plugins' directory, or as specified by $config[plugins] array.",
+            "editable": true,
+            "view_web": true,
+            "label": "Install Switch - Plugins",
+            "tab": "advanced",
+            "site": true,
+            "profile": false
+
+
+
+        },
+        "wpResetPassword": {
+            "default": false,
+            "description": "Reset the WordPress admin password for an existing installation.",
+            "editable": false,
+            "view_web": true,
+            "label": "Install Switch - ResetPassword",
+            "tab": "advanced",
+            "site": true,
+            "profile": false
+
+
+
+        }
+    },
+    "content": {
+        "posts": {
+            "default": [{
+                    "title": "Mod WP",
+                    "status": "publish",
+                    "type": "post",
+                    "slug": "mod-wp-welcome",
+                    "parent": "",
+                    "content": "Thanks for installing WordPress using the Mod WP WordPress Installer!"
+                }, {
+                    "title": "Example Preinstalled Post",
+                    "status": "publish",
+                    "type": "post",
+                    "slug": "example-post",
+                    "parent": "Mod WP",
+                    "content": "This post was automatically added when WordPress was installed using Mod WP. If you don't want this content, re-install setting 'general:add_custom_content' to false. To modify it, edit the config-site.json or config-profile.json file."
+                }, {
+                    "title": "About Mod WP",
+                    "status": "publish",
+                    "type": "page",
+                    "slug": "about",
+                    "parent": "",
+                    "content": "Do you install multiple WordPress sites for clients or for your business? You need  Mod WP. Simply configure, upload the script and run the installer. You'll get the following benefits: a clean installation (no 'Hello World' content, no example comments,plugins,themes etc., the ability to add your own custom themes, plugins and content that will be automatically added with each installation,automatic cryptographically secure password generation, and a more secure setup of your WordPress configuration files. "
+                }, {
+                    "title": "About Me",
+                    "status": "publish",
+                    "type": "page",
+                    "slug": "me",
+                    "parent": "About Mod WP",
+                    "content": "This is a little about me."
+                }],
+            "description": "Custom content of pages or posts to add during install.",
+            "editable": false,
+            "view_web": false,
+            "label": "Custom Posts and Pages",
+            "tab": "advanced",
+            "site": false,
+            "profile": true
+
+
+
+        }
+    }
+
+}

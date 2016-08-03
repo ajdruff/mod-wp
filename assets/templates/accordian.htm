@@ -1,0 +1,36 @@
+<!-- Accordian http://getbootstrap.com/javascript/#collapse -->
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+<table id="site_config_basic" class="table table-striped"></table>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingAdvancedSettings">
+      <h4 class="panel-title">
+        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseAdvancedSettings" aria-expanded="false" aria-controls="collapseAdvancedSettings">
+          <strong><em>Advanced Settings</em></strong>
+        </a>
+      </h4>
+    </div>
+    <div id="collapseAdvancedSettings" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingAdvancedSettings">
+      <div class="panel-body">
+      
+        <table id="site_config_advanced" class="table table-striped"></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingHelp">
+      <h4 class="panel-title">
+        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseHelp" aria-expanded="false" aria-controls="collapseHelp">
+          <strong><em>Help</em></strong>
+        </a>
+      </h4>
+    </div>
+    <div id="collapseHelp" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingHelp">
+      <div class="panel-body">
+      
+          <div id="help_content" class="table table-striped"> For help with configuration and troubleshooting, please see the latest <a href="http://getmodwp.com">Mod WP Readme.</a></div><div>To view the full list of configuration options, click <a href="/mod-wp/?action=help-config">here</a></div>
+      </div>
+    </div>
+  </div>
+
+</div>

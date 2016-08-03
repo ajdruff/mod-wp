@@ -31,8 +31,25 @@ $wpress->sandbox();
  * Otherwise, just execute the install script.
  */
 
+if ( $wpress->phpLib()->isCommandLine() ) {
 
-if ( $wpress->isCommandLine() ) {
+    //evaluate command line variables to see what to do next
+    $wpress->parseQueryVar();
+} else {
+
+    //include the front end html only if not called by command line and not requested with an action query
+    if ( !isset( $_GET[ 'action' ] ) ) {
+        include(dirname( __FILE__ ) . '/assets/templates/jumbotron-narrow.htm');
+    }
+
+
+    //evaluate query variables to see what to do next
+    $wpress->parseQueryVar();
+}
+    
+    exit();
+
+if ( $wpress->phpLib()->isCommandLine() ) {
 
     $wpress->wpInstall();
 } else {

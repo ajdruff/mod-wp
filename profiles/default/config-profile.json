@@ -1,0 +1,83 @@
+{
+    "general": {
+        "activate_plugins": true,
+        "add_custom_content": false,
+        "add_custom_plugins": true,
+        "add_custom_themes": true,
+        "allow_search_engines": true,
+        "show_exceptions": true,
+        "HTTP_HOST": "mod-wp.com",
+        "install_dropin": false,
+        "max_execution_time": 300,
+        "move_wpconfig": true,
+        "plugins": ["wordpress-seo", "backwpup"],
+        "reinstall": true,
+        "remove_default_content": true,
+        "remove_default_plugins": true,
+        "remove_default_themes": false,
+        "remove_file_cruft": false,
+        "script_debug": false,
+        "set_media_options": false,
+        "set_permissions": true,
+        "slide_rule": true,
+        "wp_directory": ""
+
+    },
+    "wp_options": {
+        "large_size_h": 1024,
+        "large_size_w": 1024,
+        "medium_size_h": 300,
+        "medium_size_w": 301,
+        "permalink_structure": "%postname%",
+        "template": "twentyfifteen",
+        "thumbnail_crop": true,
+        "thumbnail_size_h": 150,
+        "thumbnail_size_w": 150,
+        "uploads_use_yearmonth_folders": true
+    },
+    "wp_config": {
+        "AUTOSAVE_INTERVAL": 7200,
+        "DISALLOW_FILE_EDIT": true,
+        "media": "uploads",
+        "WP_DEBUG": false,
+        "WP_DEBUG_DISPLAY": false,
+        "WP_DEBUG_LOG": false,
+        "WP_POST_REVISIONS": false,
+        "WPCOM_API_KEY": "",
+        "WPLANG": "en_US"
+    },
+    "#": "###################################",
+    "#": "Custom Posts and Pages",
+    "#": "###################################",
+    "content": {
+        "posts": [{
+                "title": "Mod WP",
+                "status": "publish",
+                "type": "post",
+                "slug": "mod-wp-welcome",
+                "parent": "",
+                "content": "Thanks for installing WordPress using the Mod WP WordPress Installer!"
+            }, {
+                "title": "Example Preinstalled Post",
+                "status": "publish",
+                "type": "post",
+                "slug": "example-post",
+                "parent": "Mod WP",
+                "content": "This content was automatically added when WordPress was installed using Mod WP. If you don't want this content, re-install setting $config['add_custom_content']=false. To modify it, edit the profile-config.php file and look for the 'Custom Content' section."
+            }, {
+                "title": "About Mod WP",
+                "status": "publish",
+                "type": "page",
+                "slug": "about",
+                "parent": "",
+                "content": "Do you install multiple WordPress sites for clients or for your business? You need the Mod WP Installer. Simply configure, upload the script and run the installer. You'll get the following benefits: a clean installation (no 'Hello World' content, no example comments,plugins,themes etc., the ability to add your own custom themes, plugins and content that will be automatically added with each installation,automatic cryptographically secure password generation, and a more secure setup of your WordPress configuration files. "
+            }, {
+                "title": "About Me",
+                "status": "publish",
+                "type": "page",
+                "slug": "me",
+                "parent": "About Mod WP",
+                "content": "This is a little about me."
+            }]
+    }
+}
