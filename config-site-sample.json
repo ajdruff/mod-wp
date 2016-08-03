@@ -1,0 +1,42 @@
+{
+	"general": {
+		"show_exceptions": false,
+		"HTTP_HOST": "example.com",
+		"max_execution_time": 0,
+		"move_wpconfig": true,
+		"profile": "default",
+		"reinstall": false,
+		"script_debug": false,
+		"set_permissions": true,
+		"slide_rule": false,
+		"wp_directory": ""
+	},
+	"wp_options": {
+		"blogdescription": "Just Another WordPress Site",
+		"blogname": "My WordPress Site",
+		"permalink_structure": "%postname%"
+	},
+	"wp_config": {
+		"DB_HOST": "localhost",
+		"DB_NAME": "YOUR_DATABASE_NAME",
+		"DB_PASSWORD": "YOUR_DATABASE_PASSWORD",
+		"DB_USER": "YOUR_DATABASE_USERNAME",
+		"table_prefix": "wp_",
+		"WP_DEBUG": false,
+		"WP_DEBUG_DISPLAY": false,
+		"WP_DEBUG_LOG": false,
+		"WPCOM_API_KEY": ""
+	},
+	"wp_users": {
+		"user_email": "admin@example.com",
+		"user_login": "admin"
+	},
+	"install_switches": {
+		"wpDownload": true,
+		"wpConfig": true,
+		"wpInstallCore": true,
+		"wpInstallThemes": true,
+		"wpInstallPlugins": true,
+		"wpResetPassword": false
+	}
+}
