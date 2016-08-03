@@ -2275,7 +2275,7 @@ return;
         }
 
 
-        $this->SITE_CONFIG_FILE = $this->INSTALLER_DIRECTORY . '/site-config.json';
+        $this->SITE_CONFIG_FILE = $this->INSTALLER_DIRECTORY . '/config-site.json';
 
         //read the file
         $config = file_get_contents( $this->SITE_CONFIG_FILE );
