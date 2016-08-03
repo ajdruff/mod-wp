@@ -41,10 +41,6 @@
 		"WPCOM_API_KEY": "",
 		"WPLANG": "en_US"
 	},
-	"wp_users": {
-		"user_email": "admin@example.com",
-		"user_login": "admin"
-	},
 	"content": {
 		"posts": [
 			{
